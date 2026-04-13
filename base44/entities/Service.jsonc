@@ -1,0 +1,31 @@
+{
+  "name": "Service",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beschreibung"
+    },
+    "price_eur": {
+      "type": "number",
+      "title": "Preis (EUR)"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Dauer (Minuten)"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Bild URL"
+    }
+  },
+  "required": [
+    "name",
+    "price_eur",
+    "duration_minutes"
+  ]
+}

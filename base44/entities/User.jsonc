@@ -1,0 +1,19 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "Customer",
+        "Admin"
+      ],
+      "default": "Customer",
+      "title": "Rolle"
+    },
+    "phone_number": {
+      "type": "string",
+      "title": "Telefonnummer"
+    }
+  }
+}

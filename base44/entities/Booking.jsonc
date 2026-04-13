@@ -1,0 +1,73 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "Kunden-Email"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "Kundenname"
+    },
+    "service_id": {
+      "type": "string",
+      "title": "Service ID"
+    },
+    "service_name": {
+      "type": "string",
+      "title": "Service"
+    },
+    "service_price": {
+      "type": "number",
+      "title": "Preis (EUR)"
+    },
+    "appointment_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Datum"
+    },
+    "appointment_time": {
+      "type": "string",
+      "title": "Uhrzeit"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Confirmed",
+        "In Progress",
+        "Ready for Pickup"
+      ],
+      "default": "Pending",
+      "title": "Status"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "Unpaid",
+        "Paid"
+      ],
+      "default": "Unpaid",
+      "title": "Zahlungsstatus"
+    },
+    "stripe_payment_id": {
+      "type": "string",
+      "title": "Stripe Payment ID"
+    },
+    "phone_number": {
+      "type": "string",
+      "title": "Telefonnummer"
+    }
+  },
+  "required": [
+    "user_id",
+    "service_id",
+    "appointment_date",
+    "appointment_time"
+  ]
+}
