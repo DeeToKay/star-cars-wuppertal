@@ -6,6 +6,13 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
+import Landing from './pages/Landing';
+import BookingFlow from './pages/BookingFlow';
+import BookingSuccess from './pages/BookingSuccess';
+import CustomerDashboard from './pages/CustomerDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import Impressum from './pages/Impressum';
+import Datenschutz from './pages/Datenschutz';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -33,7 +40,13 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route path="/" element={<Landing />} />
+      <Route path="/booking" element={<BookingFlow />} />
+      <Route path="/booking-success" element={<BookingSuccess />} />
+      <Route path="/dashboard" element={<CustomerDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/impressum" element={<Impressum />} />
+      <Route path="/datenschutz" element={<Datenschutz />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
