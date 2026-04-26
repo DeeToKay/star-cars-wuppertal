@@ -5,12 +5,23 @@ import { base44 } from "@/api/base44Client";
 import { ArrowRight, ArrowLeft, Check, Clock, Euro, Calendar, AlertCircle, Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 
-const TIME_SLOTS = [
-  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-  "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-  "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
-  "17:00", "17:30",
+// Slots from 10:00–19:30 (latest start; end by 20:00 depends on service duration)
+const ALL_TIME_SLOTS = [
+  "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+  "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+  "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+  "19:00", "19:30",
 ];
+
+function timeToMinutes(t) {
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function getAvailableSlots(durationMinutes) {
+  const closeMin = 20 * 60;
+  return ALL_TIME_SLOTS.filter(t => timeToMinutes(t) + durationMinutes <= closeMin);
+}
 
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
@@ -28,7 +39,7 @@ export default function BookingFlow() {
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [takenSlots, setTakenSlots] = useState([]);
+  const [slotCounts, setSlotCounts] = useState({}); // time -> count of bookings
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -49,10 +60,16 @@ export default function BookingFlow() {
     base44.entities.Service.list().then(setServices);
   }, []);
 
+  const MAX_BAYS = 3;
+
   useEffect(() => {
     if (!selectedDate) return;
     base44.entities.Booking.filter({ appointment_date: selectedDate }).then((bookings) => {
-      setTakenSlots(bookings.map((b) => b.appointment_time));
+      const counts = {};
+      bookings.forEach(b => {
+        counts[b.appointment_time] = (counts[b.appointment_time] || 0) + 1;
+      });
+      setSlotCounts(counts);
     });
   }, [selectedDate]);
 
@@ -68,7 +85,7 @@ export default function BookingFlow() {
 
   const isDayDisabled = (day) => {
     const d = new Date(calYear, calMonth, day);
-    return d < today || d.getDay() === 0; // No Sundays
+    return d < today || d.getDay() === 0; // No Sundays (0)
   };
 
   const handleDateSelect = (day) => {
@@ -94,6 +111,7 @@ export default function BookingFlow() {
         service_id: selectedService.id,
         service_name: selectedService.name,
         service_price: selectedService.price_eur,
+        service_duration: selectedService.duration_minutes,
         appointment_date: selectedDate,
         appointment_time: selectedTime,
         phone_number: phone,
@@ -267,17 +285,22 @@ export default function BookingFlow() {
                       <h3 className="text-sm font-bold text-[#A1A1AA] uppercase tracking-widest mb-4 font-mono">
                         Verfügbare Zeiten
                       </h3>
+                      {!selectedService && (
+                        <p className="text-[#A1A1AA] text-xs mb-3">Bitte zuerst einen Service wählen, um passende Slots zu sehen.</p>
+                      )}
                       <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
-                        {TIME_SLOTS.map((t) => {
-                          const taken = takenSlots.includes(t);
+                        {getAvailableSlots(selectedService?.duration_minutes || 60).map((t) => {
+                          const count = slotCounts[t] || 0;
+                          const fullyBooked = count >= MAX_BAYS;
                           return (
                             <button
                               key={t}
-                              disabled={taken}
+                              disabled={fullyBooked}
                               onClick={() => setSelectedTime(t)}
                               className={`py-2 text-sm font-mono font-medium border transition-all ${
                                 selectedTime === t ? "border-[#E30613] bg-[#E30613] text-white" :
-                                taken ? "border-white/5 text-white/20 cursor-not-allowed line-through" :
+                                fullyBooked ? "border-white/5 text-white/20 cursor-not-allowed line-through" :
+                                count > 0 ? "border-yellow-500/40 text-yellow-300 hover:border-[#E30613]" :
                                 "border-white/20 text-white hover:border-[#E30613] hover:text-[#E30613]"
                               }`}
                             >
@@ -285,6 +308,11 @@ export default function BookingFlow() {
                             </button>
                           );
                         })}
+                      </div>
+                      <div className="flex items-center gap-4 mt-3 text-xs text-[#A1A1AA]">
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/20 inline-block" /> Frei</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 border border-yellow-500/40 inline-block" /> Teilweise belegt</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/5 inline-block opacity-30" /> Ausgebucht</span>
                       </div>
                     </motion.div>
                   )}

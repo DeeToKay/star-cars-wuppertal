@@ -1,0 +1,40 @@
+{
+  "name": "Settings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "title": "Schl\u00fcssel"
+    },
+    "value": {
+      "type": "string",
+      "title": "Wert"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beschreibung"
+    }
+  },
+  "required": [
+    "key",
+    "value"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    }
+  }
+}

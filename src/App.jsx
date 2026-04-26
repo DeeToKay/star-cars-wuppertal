@@ -13,6 +13,8 @@ import CustomerDashboard from './pages/CustomerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Impressum from './pages/Impressum';
 import Datenschutz from './pages/Datenschutz';
+import AGB from './pages/AGB';
+import CookieBanner from './components/CookieBanner';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -47,6 +49,7 @@ const AuthenticatedApp = () => {
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/impressum" element={<Impressum />} />
       <Route path="/datenschutz" element={<Datenschutz />} />
+      <Route path="/agb" element={<AGB />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
@@ -61,6 +64,7 @@ function App() {
         <Router>
           <AuthenticatedApp />
         </Router>
+        <CookieBanner />
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>

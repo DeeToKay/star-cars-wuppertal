@@ -29,6 +29,56 @@ Deno.serve(async (req) => {
           status: 'Confirmed',
           stripe_payment_id: session.payment_intent || session.id,
         });
+
+        // Fetch booking for confirmation email
+        const booking = await base44.asServiceRole.entities.Booking.get(bookingId);
+        if (booking && booking.user_email) {
+          await base44.asServiceRole.integrations.Core.SendEmail({
+            to: booking.user_email,
+            from_name: 'Star Cars Wuppertal',
+            subject: `✅ Buchungsbestätigung – ${booking.service_name} am ${booking.appointment_date}`,
+            body: `Hallo ${booking.user_name || 'Kunde'},
+
+Ihre Buchung bei Star Cars Wuppertal ist bestätigt! 🎉
+
+═══════════════════════════════
+  BUCHUNGSDETAILS
+═══════════════════════════════
+Service:  ${booking.service_name}
+Datum:    ${booking.appointment_date}
+Uhrzeit:  ${booking.appointment_time} Uhr
+Preis:    €${Number(booking.service_price).toFixed(2)} (vollständig bezahlt)
+
+═══════════════════════════════
+  IHR TERMIN
+═══════════════════════════════
+📍 Star Cars Wuppertal
+   Ronsdorferstr. 57, 42283 Wuppertal
+   (an der StarTankstelle)
+
+📞 01726871641
+✉️ info@starcarswuppertal.com
+🕐 Mo–Sa 10:00–20:00 Uhr
+
+═══════════════════════════════
+  STORNOREGELN
+═══════════════════════════════
+• 14+ Tage vor Termin: 100% Erstattung
+• 7–13 Tage vor Termin: 50% Erstattung
+• < 7 Tage / No-Show: keine Erstattung
+
+Stornierungen nur per E-Mail: info@starcarswuppertal.com
+AGB: https://starcarswuppertal.com/agb
+
+Wir freuen uns auf Ihren Besuch!
+
+Mit freundlichen Grüßen,
+Kilic Savas
+Star Cars Wuppertal`,
+          });
+          console.log(`Confirmation email sent to ${booking.user_email}`);
+        }
+
         console.log(`Booking ${bookingId} marked as Paid & Confirmed`);
       }
     }
