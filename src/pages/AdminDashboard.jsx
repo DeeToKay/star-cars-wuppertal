@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List } from "lucide-react";
+import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List, Upload } from "lucide-react";
 import Navbar from "../components/Navbar";
 import AdminFilters, { STATUS_CONFIG, STATUSES } from "../components/admin/AdminFilters";
 import BookingTable from "../components/admin/BookingTable";
@@ -32,6 +32,30 @@ export default function AdminDashboard() {
   const [flashGreen, setFlashGreen] = useState(null);
   const [unauthorized, setUnauthorized] = useState(false);
   const [viewMode, setViewMode] = useState("list"); // "list" | "bay"
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+
+  useEffect(() => {
+    base44.entities.Settings.filter({ key: "logo_url" })
+      .then(res => { if (res.length > 0) setLogoUrl(res[0].value || ""); })
+      .catch(() => {});
+  }, []);
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setLogoUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    // Upsert logo_url setting
+    const existing = await base44.entities.Settings.filter({ key: "logo_url" });
+    if (existing.length > 0) {
+      await base44.entities.Settings.update(existing[0].id, { value: file_url, image_url: file_url });
+    } else {
+      await base44.entities.Settings.create({ key: "logo_url", value: file_url, image_url: file_url, description: "Logo URL für Header und Footer" });
+    }
+    setLogoUrl(file_url);
+    setLogoUploading(false);
+  };
 
   useEffect(() => {
     base44.auth.isAuthenticated().then(async (authed) => {
@@ -148,6 +172,23 @@ export default function AdminDashboard() {
               <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#A1A1AA] hover:text-white"}`}>
                 <LayoutGrid className="w-4 h-4" />
               </button>
+            </div>
+          </div>
+
+          {/* Logo Upload */}
+          <div className="mb-8 p-5 bg-[#161618] border border-white/10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-3 h-px bg-[#E10600]" />
+              <span className="text-xs font-mono text-[#E10600] uppercase tracking-widest">Logo-Einstellung</span>
+            </div>
+            <div className="flex items-center gap-5 flex-wrap">
+              {logoUrl && <img src={logoUrl} alt="Logo" className="h-12 object-contain border border-white/10 p-1" />}
+              <label className="flex items-center gap-2 cursor-pointer border border-white/20 hover:border-[#E10600] text-sm text-[#B5B5B5] hover:text-white px-4 py-2 transition-colors">
+                {logoUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                {logoUploading ? "Wird hochgeladen..." : "Logo hochladen"}
+                <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} disabled={logoUploading} />
+              </label>
+              <span className="text-[#B5B5B5] text-xs">Empfohlen: schwarzer Hintergrund, min. 400px Breite</span>
             </div>
           </div>
 

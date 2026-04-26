@@ -13,6 +13,10 @@
     "description": {
       "type": "string",
       "title": "Beschreibung"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Bild URL (f\u00fcr Logo)"
     }
   },
   "required": [
