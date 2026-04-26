@@ -1,0 +1,55 @@
+{
+  "name": "GalleryItem",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "service_type": {
+      "type": "string",
+      "title": "Service-Kategorie"
+    },
+    "before_image_url": {
+      "type": "string",
+      "title": "Vorher-Bild URL"
+    },
+    "after_image_url": {
+      "type": "string",
+      "title": "Nachher-Bild URL"
+    },
+    "sort_order": {
+      "type": "number",
+      "title": "Reihenfolge",
+      "default": 0
+    },
+    "is_published": {
+      "type": "boolean",
+      "title": "Ver\u00f6ffentlicht",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "before_image_url",
+    "after_image_url"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    }
+  }
+}
