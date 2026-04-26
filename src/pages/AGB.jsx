@@ -21,43 +21,39 @@ export default function AGB() {
 
           <section>
             <h2 className="text-white font-bold text-base mb-3">§ 2 Vertragsschluss & Buchung</h2>
-            <p>Die Buchung erfolgt online über die Website. Nach Auswahl des Services und Termins wird der Auftraggeber zur Zahlung via Stripe weitergeleitet. Der Vertrag kommt erst mit erfolgreicher Zahlung und Bestätigung per E-Mail zustande.</p>
+            <p>Die Buchung erfolgt online über die Website. Mit Auswahl des Services, des Termins und Absenden des Buchungsformulars gibt der Auftraggeber eine verbindliche Reservierungsanfrage ab. Der Vertrag kommt mit der Buchungsbestätigung per E-Mail zustande. Eine Vorkasse ist nicht erforderlich.</p>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 3 Kein Widerrufsrecht nach Leistungsbeginn</h2>
-            <p>Bei individuell vereinbarten Dienstleistungsterminen erlischt das gesetzliche Widerrufsrecht gemäß § 356 Abs. 4 BGB, sobald die Dienstleistung mit ausdrücklicher Zustimmung des Auftraggebers vor Ablauf der Widerrufsfrist vollständig erbracht wurde. Der Auftraggeber stimmt durch Abschluss der Buchung ausdrücklich zu, dass mit der Erbringung der Dienstleistung am gebuchten Termin begonnen werden darf.</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 3 Zahlung</h2>
+            <p>Die Buchung ist eine verbindliche Reservierung. Die Zahlung erfolgt ausschließlich vor Ort bei Abholung des Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Es wird keine Vorkasse erhoben. Alle Preise sind Endpreise in Euro (€) inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar).</p>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung & Rückvergütung</h2>
-            <div className="space-y-2">
-              <p className="font-medium text-white">Stornierungsfristen (gerechnet ab dem vereinbarten Termin):</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung & No-Show</h2>
+            <div className="space-y-3">
+              <p>Stornierungen sind kostenlos bis <strong className="text-white">24 Stunden vor dem vereinbarten Termin</strong> per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> oder telefonisch unter <a href="tel:01726871641" className="text-[#E30613]">01726871641</a> möglich. Maßgeblich ist der Eingang der Stornierung beim Anbieter.</p>
               <div className="border border-white/10 overflow-hidden mt-3">
-                <div className="grid grid-cols-2 gap-0 border-b border-white/10">
+                <div className="grid grid-cols-2 border-b border-white/10">
                   <div className="px-4 py-3 bg-white/5 font-medium text-white text-xs uppercase tracking-wider">Stornierungszeitpunkt</div>
-                  <div className="px-4 py-3 bg-white/5 font-medium text-white text-xs uppercase tracking-wider">Erstattung</div>
+                  <div className="px-4 py-3 bg-white/5 font-medium text-white text-xs uppercase tracking-wider">Konsequenz</div>
                 </div>
                 <div className="grid grid-cols-2 border-b border-white/10">
-                  <div className="px-4 py-3">14 Tage oder mehr vor Termin</div>
-                  <div className="px-4 py-3 text-green-400 font-bold">100 %</div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white/10">
-                  <div className="px-4 py-3">7 bis 13 Tage vor Termin</div>
-                  <div className="px-4 py-3 text-yellow-400 font-bold">50 %</div>
+                  <div className="px-4 py-3">Mehr als 24 h vor Termin</div>
+                  <div className="px-4 py-3 text-green-400 font-bold">Kostenlos</div>
                 </div>
                 <div className="grid grid-cols-2">
-                  <div className="px-4 py-3">Weniger als 7 Tage vor Termin / No-Show</div>
-                  <div className="px-4 py-3 text-[#E30613] font-bold">0 %</div>
+                  <div className="px-4 py-3">Weniger als 24 h vor Termin oder No-Show</div>
+                  <div className="px-4 py-3 text-[#E30613] font-bold">Bearbeitungspauschale 20 % des Servicepreises</div>
                 </div>
               </div>
-              <p className="mt-4">Stornierungen sind ausschließlich per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> einzureichen. Maßgeblich ist das Eingangsdatum der E-Mail.</p>
+              <p className="mt-2">Bei Nichterscheinen (No-Show) oder Stornierung weniger als 24 Stunden vor dem vereinbarten Termin behält sich der Anbieter vor, eine Bearbeitungspauschale in Höhe von 20 % des gebuchten Servicepreises als Schadensersatz für die entgangene Belegung zu berechnen. Die Geltendmachung erfolgt per Rechnung per E-Mail.</p>
             </div>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 5 Preise & Zahlung</h2>
-            <p>Alle Preise sind Endpreise in Euro (€) inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar). Die Zahlung erfolgt als 100 % Vorkasse über den Zahlungsdienstleister Stripe. Eine Buchung gilt erst nach vollständigem Zahlungseingang als verbindlich bestätigt.</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 5 Kein Widerrufsrecht nach Leistungsbeginn</h2>
+            <p>Bei individuell vereinbarten Dienstleistungsterminen erlischt das gesetzliche Widerrufsrecht gemäß § 356 Abs. 4 BGB, sobald die Dienstleistung mit ausdrücklicher Zustimmung des Auftraggebers vor Ablauf der Widerrufsfrist vollständig erbracht wurde. Der Auftraggeber stimmt durch Abschluss der Buchung ausdrücklich zu, dass mit der Erbringung der Dienstleistung am gebuchten Termin begonnen werden darf.</p>
           </section>
 
           <section>

@@ -4,7 +4,7 @@
   "properties": {
     "user_id": {
       "type": "string",
-      "title": "Kunde"
+      "title": "Kunde (optional)"
     },
     "user_email": {
       "type": "string",
@@ -38,12 +38,14 @@
     "status": {
       "type": "string",
       "enum": [
-        "Pending",
         "Confirmed",
         "In Progress",
-        "Ready for Pickup"
+        "Ready for Pickup",
+        "Picked Up",
+        "Cancelled",
+        "No-Show"
       ],
-      "default": "Pending",
+      "default": "Confirmed",
       "title": "Status"
     },
     "payment_status": {
@@ -55,19 +57,63 @@
       "default": "Unpaid",
       "title": "Zahlungsstatus"
     },
-    "stripe_payment_id": {
+    "payment_paid_at": {
       "type": "string",
-      "title": "Stripe Payment ID"
+      "title": "Bezahlt am"
     },
     "phone_number": {
       "type": "string",
       "title": "Telefonnummer"
+    },
+    "license_plate": {
+      "type": "string",
+      "title": "Kfz-Kennzeichen"
+    },
+    "cancellation_reason": {
+      "type": "string",
+      "title": "Stornogrund"
+    },
+    "google_calendar_event_id": {
+      "type": "string",
+      "title": "Google Calendar Event ID"
+    },
+    "agb_accepted": {
+      "type": "boolean",
+      "title": "AGB akzeptiert"
     }
   },
   "required": [
-    "user_id",
+    "user_email",
     "service_id",
     "appointment_date",
     "appointment_time"
-  ]
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "Admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    }
+  }
 }

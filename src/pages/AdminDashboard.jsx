@@ -7,11 +7,11 @@ import AdminFilters, { STATUS_CONFIG, STATUSES } from "../components/admin/Admin
 import BookingTable from "../components/admin/BookingTable";
 
 function exportCSV(bookings) {
-  const headers = ["Datum", "Uhrzeit", "Kundenname", "E-Mail", "Telefon", "Service", "Preis (EUR)", "Status", "Zahlung", "Stripe ID"];
+  const headers = ["Datum", "Uhrzeit", "Kundenname", "E-Mail", "Telefon", "Kennzeichen", "Service", "Preis (EUR)", "Status", "Zahlung"];
   const rows = bookings.map(b => [
     b.appointment_date, b.appointment_time, b.user_name, b.user_email,
-    b.phone_number, b.service_name, Number(b.service_price || 0).toFixed(2),
-    b.status, b.payment_status, b.stripe_payment_id || ""
+    b.phone_number, b.license_plate || "", b.service_name, Number(b.service_price || 0).toFixed(2),
+    b.status, b.payment_status
   ]);
   const csv = [headers, ...rows].map(r => r.map(v => `"${String(v || "").replace(/"/g, '""')}"`).join(",")).join("\n");
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
@@ -32,6 +32,7 @@ export default function AdminDashboard() {
   const [flashGreen, setFlashGreen] = useState(null);
   const [unauthorized, setUnauthorized] = useState(false);
   const [viewMode, setViewMode] = useState("list"); // "list" | "bay"
+  const [searchQuery, setSearchQuery] = useState("");
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
 
@@ -70,12 +71,23 @@ export default function AdminDashboard() {
   }, []);
 
   const handleStatusChange = async (bookingId, newStatus) => {
+    const booking = bookings.find(b => b.id === bookingId);
+    // Confirm before sending notification
+    if (newStatus === "Ready for Pickup" && booking?.user_email) {
+      const ok = confirm(`E-Mail "Fahrzeug abholbereit" an ${booking.user_name || booking.user_email} senden?`);
+      if (!ok) return;
+    }
     setUpdating(bookingId);
     await base44.entities.Booking.update(bookingId, { status: newStatus });
     setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: newStatus } : b));
     if (newStatus === "Ready for Pickup") {
       setFlashGreen(bookingId);
       setTimeout(() => setFlashGreen(null), 2500);
+      // Send notification email
+      base44.functions.invoke("sendNotification", { type: "ready", booking_id: bookingId }).catch(console.error);
+    }
+    if (newStatus === "Cancelled") {
+      base44.functions.invoke("sendNotification", { type: "cancelled", booking_id: bookingId }).catch(console.error);
     }
     setUpdating(null);
   };
@@ -97,7 +109,15 @@ export default function AdminDashboard() {
     if (filter === "week") return b.appointment_date >= today && b.appointment_date <= weekEnd;
     if (STATUSES.includes(filter)) return b.status === filter;
     return true;
-  }).filter(b => !serviceFilter || b.service_name === serviceFilter);
+  }).filter(b => !serviceFilter || b.service_name === serviceFilter)
+    .filter(b => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (b.user_name || "").toLowerCase().includes(q) ||
+             (b.license_plate || "").toLowerCase().includes(q) ||
+             (b.phone_number || "").toLowerCase().includes(q) ||
+             (b.user_email || "").toLowerCase().includes(q);
+    });
 
   if (loading) return (
     <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center">
@@ -128,12 +148,17 @@ export default function AdminDashboard() {
               </div>
               <h1 className="text-4xl font-black tracking-tight">Admin Dashboard</h1>
             </div>
-            <button
-              onClick={() => exportCSV(filtered)}
-              className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors"
-            >
-              <Download className="w-4 h-4" /> CSV Export
-            </button>
+            <div className="flex gap-3">
+              <a href="/admin/gallery" className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors">
+                🖼 Galerie
+              </a>
+              <button
+                onClick={() => exportCSV(filtered)}
+                className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors"
+              >
+                <Download className="w-4 h-4" /> CSV
+              </button>
+            </div>
           </div>
 
           {/* Stats */}
@@ -163,6 +188,7 @@ export default function AdminDashboard() {
                 dateFilter={dateFilter} setDateFilter={setDateFilter}
                 serviceFilter={serviceFilter} setServiceFilter={setServiceFilter}
                 services={allServiceNames}
+                searchQuery={searchQuery} setSearchQuery={setSearchQuery}
               />
             </div>
             <div className="flex border border-white/10 overflow-hidden shrink-0">

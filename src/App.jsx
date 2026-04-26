@@ -15,6 +15,7 @@ import Impressum from './pages/Impressum';
 import Datenschutz from './pages/Datenschutz';
 import AGB from './pages/AGB';
 import Galerie from './pages/Galerie';
+import AdminGallery from './pages/AdminGallery';
 import CookieBanner from './components/CookieBanner';
 
 const AuthenticatedApp = () => {
@@ -52,6 +53,7 @@ const AuthenticatedApp = () => {
       <Route path="/datenschutz" element={<Datenschutz />} />
       <Route path="/agb" element={<AGB />} />
       <Route path="/galerie" element={<Galerie />} />
+      <Route path="/admin/gallery" element={<AdminGallery />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
