@@ -6,6 +6,10 @@
       "type": "string",
       "title": "Name"
     },
+    "tagline": {
+      "type": "string",
+      "title": "Untertitel / Claim"
+    },
     "description": {
       "type": "string",
       "title": "Beschreibung"
@@ -18,6 +22,32 @@
       "type": "number",
       "title": "Dauer (Minuten)"
     },
+    "duration_label": {
+      "type": "string",
+      "title": "Dauer-Anzeige (z.B. ca. 1–1,5 Std.)"
+    },
+    "features": {
+      "type": "array",
+      "title": "Enthaltene Leistungen",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "badge": {
+      "type": "string",
+      "title": "Badge (z.B. Bestseller)"
+    },
+    "tier": {
+      "type": "number",
+      "title": "Reihenfolge (1–4)",
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "title": "Buchbar",
+      "default": true
+    },
     "image_url": {
       "type": "string",
       "title": "Bild URL"
@@ -27,5 +57,23 @@
     "name",
     "price_eur",
     "duration_minutes"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "Admin"
+      }
+    }
+  }
 }

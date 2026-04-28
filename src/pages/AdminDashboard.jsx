@@ -149,6 +149,9 @@ export default function AdminDashboard() {
               <h1 className="text-4xl font-black tracking-tight">Admin Dashboard</h1>
             </div>
             <div className="flex gap-3">
+              <a href="/admin/services" className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors">
+                📦 Pakete
+              </a>
               <a href="/admin/gallery" className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors">
                 🖼 Galerie
               </a>

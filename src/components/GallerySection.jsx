@@ -5,11 +5,17 @@ import { ArrowRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 
-// Fallback items if no DB records yet
+// Fallback items if no DB records yet.
+// "Vorher" und "Nachher" zeigen dasselbe Foto – das "Vorher"-Bild ist entsättigt
+// und leicht abgedunkelt, damit der Slider visuell stimmig ist.
+// Sobald der Inhaber im Admin echte Vorher/Nachher-Paare hochlädt, ersetzen die
+// veröffentlichten Galerie-Einträge diese Demo-Bilder automatisch.
+const demoBefore = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85&sat=-100&exp=-20&blur=4`;
+const demoAfter  = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85`;
 const FALLBACK = [
-  { id:"f1", title:"Premium Detailing – Mercedes S-Klasse", before_image_url:"https://images.unsplash.com/photo-1590362891991-f776e747a588?w=1200&q=85", after_image_url:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=85" },
-  { id:"f2", title:"Smart Repair – BMW M3",                 before_image_url:"https://images.unsplash.com/photo-1517524285303-d6fc683dddf8?w=1200&q=85", after_image_url:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=85" },
-  { id:"f3", title:"VIP Komplettpaket – Porsche 911",       before_image_url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85", after_image_url:"https://images.unsplash.com/photo-1612544409025-a69b7a36e3b3?w=1200&q=85" },
+  { id:"f1", title:"BASIC – Außen- & Innenpflege", before_image_url: demoBefore("1607860108855-64acf2078ed9"), after_image_url: demoAfter("1607860108855-64acf2078ed9") },
+  { id:"f2", title:"DELUXE – Tiefenglanz",         before_image_url: demoBefore("1503376780353-7e6692767b70"), after_image_url: demoAfter("1503376780353-7e6692767b70") },
+  { id:"f3", title:"EXCLUSIVE – Showroom-Finish",  before_image_url: demoBefore("1563720360172-67b8f3dce741"), after_image_url: demoAfter("1563720360172-67b8f3dce741") },
 ];
 
 export default function GallerySection({ showAll = false }) {

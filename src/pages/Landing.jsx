@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Star, Clock, Shield, CreditCard, MapPin, CheckCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, Star, Clock, Shield, CreditCard, MapPin, CheckCircle, ChevronDown, Check } from "lucide-react";
+import { SERVICE_PACKAGES, ADDON_POLISH_NOTE } from "@/lib/services";
 
 const FAQ_ITEMS = [
-  { q: "Wie buche ich einen Termin?", a: "Wählen Sie Ihren Service auf dieser Seite, klicken Sie auf 'Jetzt buchen', wählen Sie Datum & Uhrzeit und geben Sie Ihre Kontaktdaten ein. Die Buchung dauert nur 2 Minuten – keine Anmeldung erforderlich." },
-  { q: "Was kostet welche Leistung?", a: "Express-Reinigung ab €39,99 (45 Min.), Premium Detailing ab €149,99 (3 Std.), Smart Repair ab €199,99 (4 Std.), VIP Komplettpaket ab €349,99 (6 Std.). Festpreise, keine versteckten Kosten." },
-  { q: "Wie lange dauert eine Aufbereitung?", a: "Das hängt vom gewählten Service ab: Express 45 Min., Premium Detailing 3 Std., Smart Repair 4 Std., VIP Komplett 6 Std. Wir benachrichtigen Sie per E-Mail, sobald Ihr Fahrzeug fertig ist." },
+  { q: "Wie buche ich einen Termin?", a: "Wählen Sie Ihr Paket auf dieser Seite, klicken Sie auf 'Jetzt buchen', wählen Sie Datum & Uhrzeit und geben Sie Ihre Kontaktdaten ein. Die Buchung dauert nur 2 Minuten – keine Anmeldung erforderlich." },
+  { q: "Was kostet welches Paket?", a: "BASIC 79 € (ca. 1–1,5 Std.), STANDARD 159 € (ca. 2–3 Std.), DELUXE 269 € (ca. 4–5 Std.), EXCLUSIVE 999 € (individuell). Festpreise, keine versteckten Kosten. Zusätzliche Politurgänge werden mit jeweils 89,00 € berechnet." },
+  { q: "Wie lange dauert eine Aufbereitung?", a: "Das hängt vom gewählten Paket ab: BASIC ca. 1–1,5 Std., STANDARD ca. 2–3 Std., DELUXE ca. 4–5 Std., EXCLUSIVE individuell nach Fahrzeugzustand. Wir benachrichtigen Sie per E-Mail, sobald Ihr Fahrzeug fertig ist." },
   { q: "Wie komme ich zur Werkstatt & wo parke ich?", a: "Sie finden uns direkt an der StarTankstelle, Ronsdorfer Str. 57, 42119 Wuppertal. Parkplätze sind direkt vor Ort vorhanden. Mit dem Bus: Haltestelle in der Nähe. Navigationsadresse: Ronsdorfer Str. 57, 42119 Wuppertal." },
   { q: "Wie kann ich stornieren?", a: "Stornierungen sind jederzeit kostenlos – per E-Mail an info@starcarswuppertal.com oder telefonisch unter 01726871641. Es fallen keine Gebühren an." },
   { q: "Wie bezahle ich?", a: "Die Zahlung erfolgt ausschließlich vor Ort bei Abholung Ihres Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Es wird keine Vorkasse erhoben und keine Reservierungsgebühr berechnet." },
@@ -49,36 +50,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import GallerySection from "../components/GallerySection";
 
-const SERVICES = [
-  {
-    name: "Express-Reinigung",
-    description: "Professionelle Außenwäsche, Felgenreinigung, Trocknung und Basis-Innenreinigung. Schnell, präzise, makellos.",
-    price: "39.99",
-    duration: "45 Min.",
-    image: "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=900&q=85",
-  },
-  {
-    name: "Premium Detailing",
-    description: "Vollständige Innen- und Außenreinigung, Lederbehandlung, Lackpolitur und Versiegelung.",
-    price: "149.99",
-    duration: "180 Min.",
-    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=900&q=85",
-  },
-  {
-    name: "Smart Repair",
-    description: "Professionelle Beseitigung von Kratzern, Dellen und Lackschäden. Restauration auf Werksstandard.",
-    price: "199.99",
-    duration: "240 Min.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85",
-  },
-  {
-    name: "VIP Komplettpaket",
-    description: "Das Ultimative: Detailing, Smart Repair, Scheibenreinigung, Ozonbehandlung und Langzeit-Versiegelung.",
-    price: "349.99",
-    duration: "360 Min.",
-    image: "https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=900&q=85",
-  },
-];
+const SERVICES = SERVICE_PACKAGES;
 
 export default function Landing() {
   return (
@@ -196,7 +168,7 @@ export default function Landing() {
           <h2 className="text-3xl md:text-4xl font-black mb-14">So einfach geht's</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { num: "01", title: "Service wählen", desc: "Express, Detailing, Smart Repair oder VIP Paket – Festpreis, keine Überraschungen." },
+              { num: "01", title: "Paket wählen", desc: "BASIC, STANDARD, DELUXE oder EXCLUSIVE – transparente Festpreise, keine Überraschungen." },
               { num: "02", title: "Termin buchen", desc: "Datum und Uhrzeit wählen – alles in 2 Minuten online. Zahlung bequem vor Ort." },
               { num: "03", title: "Auto bringen", desc: "Einfach vorbeikommen, wir kümmern uns um alles. Sie erhalten eine Benachrichtigung wenn fertig." },
             ].map((step) => (
@@ -223,10 +195,11 @@ export default function Landing() {
               <div className="w-8 h-px bg-[#E10600]" />
               <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">Leistungen</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">Unsere Services</h2>
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">Unsere Pakete</h2>
+            <p className="text-[#C9C9D1] mt-3 max-w-2xl">Vier transparente Festpreis-Pakete – vom schnellen Glanz bis zum Showroom-Finish.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#E10600]/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#E10600]/10">
             {SERVICES.map((service, i) => (
               <motion.div
                 key={service.name}
@@ -234,10 +207,15 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="group bg-[#131313] overflow-hidden flex flex-col"
+                className="group bg-[#131313] overflow-hidden flex flex-col relative"
               >
                 {/* Red accent line top */}
                 <div className="h-0.5 bg-[#E10600]" />
+                {service.badge && (
+                  <span className="absolute top-3 right-3 z-10 bg-[#E10600] text-white text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-1">
+                    {service.badge}
+                  </span>
+                )}
                 <div className="aspect-video overflow-hidden">
                   <img
                     src={service.image}
@@ -247,25 +225,45 @@ export default function Landing() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-50 group-hover:brightness-60"
                   />
                 </div>
-                <div className="p-7 flex flex-col flex-1">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-white">{service.name}</h3>
-                    <div className="text-right ml-4">
-                      <div className="font-mono font-bold text-[#E10600] text-2xl">€{service.price}</div>
-                      <div className="font-mono text-[#C0C0C0] text-xs">{service.duration}</div>
-                    </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="text-2xl font-black text-white tracking-wide">{service.name}</h3>
+                  <div className="flex items-baseline gap-2 mt-1 mb-3">
+                    <span className="font-mono font-bold text-[#E10600] text-3xl">{service.price_eur} €</span>
                   </div>
-                  <p className="text-[#B5B5B5] leading-relaxed text-sm flex-1">{service.description}</p>
-                  <Link
-                    to="/booking"
-                    className="mt-6 inline-flex items-center justify-center gap-2 bg-[#E10600] text-white font-bold px-6 py-3 hover:bg-[#c00500] transition-colors text-sm self-start"
-                  >
-                    Jetzt buchen <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  {service.tagline && (
+                    <p className="text-white font-semibold text-sm uppercase tracking-wide mb-2">{service.tagline}</p>
+                  )}
+                  <p className="text-[#C9C9D1] leading-relaxed text-sm mb-4">{service.description}</p>
+
+                  <ul className="space-y-2 mb-5">
+                    {service.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-[#C9C9D1] text-xs leading-relaxed">
+                        <Check className="w-3.5 h-3.5 text-[#E10600] shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-2 text-[#C0C0C0] text-xs font-mono mb-4">
+                      <Clock className="w-3 h-3" />
+                      <span>{service.duration_label}</span>
+                    </div>
+                    <Link
+                      to="/booking"
+                      className="inline-flex w-full items-center justify-center gap-2 bg-[#E10600] text-white font-bold px-6 py-3 hover:bg-[#c00500] transition-colors text-sm"
+                    >
+                      Jetzt buchen <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          <p className="mt-6 text-[#C9C9D1] text-xs font-mono uppercase tracking-widest text-center">
+            {ADDON_POLISH_NOTE}
+          </p>
         </div>
       </section>
 

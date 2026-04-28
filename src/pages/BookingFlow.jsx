@@ -6,6 +6,7 @@ import { ArrowRight, ArrowLeft, Check, Clock, AlertCircle, Loader2, Car } from "
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { validateContact } from "@/lib/booking-schema";
+import { ADDON_POLISH_NOTE } from "@/lib/services";
 
 const ALL_TIME_SLOTS = [
   "10:00","10:30","11:00","11:30","12:00","12:30",
@@ -168,31 +169,53 @@ export default function BookingFlow() {
               {/* STEP 1: Service */}
               {step===1 && (
                 <motion.div key="s1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="text-2xl font-black mb-6">Service wählen</h2>
+                  <h2 className="text-2xl font-black mb-6">Paket wählen</h2>
                   {services.length===0 ? (
                     <div className="flex items-center justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#E30613]"/></div>
                   ) : (
                     <div className="grid gap-4">
-                      {services.map(s => (
-                        <button key={s.id} onClick={()=>setSelectedService(s)}
-                          className={`w-full text-left p-5 border transition-all min-h-[44px] ${selectedService?.id===s.id?"border-[#E30613] bg-[#E30613]/10":"border-white/10 bg-[#161618] hover:border-white/30"}`}>
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="font-bold text-white text-lg">{s.name}</div>
-                              <div className="text-[#C9C9D1] text-sm mt-1">{s.description}</div>
-                              <div className="flex items-center gap-1 text-[#C9C9D1] text-xs mt-2">
-                                <Clock className="w-3 h-3"/><span>{s.duration_minutes} Min.</span>
+                      {services.map(s => {
+                        const selected = selectedService?.id === s.id;
+                        const features = Array.isArray(s.features) ? s.features : [];
+                        const durationLabel = s.duration_label || `${s.duration_minutes} Min.`;
+                        return (
+                          <button key={s.id} onClick={()=>setSelectedService(s)}
+                            className={`w-full text-left p-5 border transition-all min-h-[44px] relative ${selected?"border-[#E30613] bg-[#E30613]/10":"border-white/10 bg-[#161618] hover:border-white/30"}`}>
+                            {s.badge && (
+                              <span className="absolute top-3 right-3 bg-[#E30613] text-white text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-0.5">
+                                {s.badge}
+                              </span>
+                            )}
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-bold text-white text-lg tracking-wide">{s.name}</div>
+                                {s.tagline && <div className="text-white/80 text-xs uppercase tracking-wide font-semibold mt-0.5">{s.tagline}</div>}
+                                <div className="text-[#C9C9D1] text-sm mt-2">{s.description}</div>
+                                {features.length > 0 && (
+                                  <ul className="mt-3 space-y-1.5">
+                                    {features.map((f) => (
+                                      <li key={f} className="flex items-start gap-2 text-[#C9C9D1] text-xs leading-relaxed">
+                                        <Check className="w-3 h-3 text-[#E30613] shrink-0 mt-0.5" />
+                                        <span>{f}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                                <div className="flex items-center gap-1 text-[#C9C9D1] text-xs mt-3">
+                                  <Clock className="w-3 h-3"/><span>{durationLabel}</span>
+                                </div>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <div className="font-mono font-bold text-[#E30613] text-2xl">{Number(s.price_eur).toFixed(0)} €</div>
+                                {selected && <Check className="w-5 h-5 text-[#E30613] ml-auto mt-2"/>}
                               </div>
                             </div>
-                            <div className="text-right ml-4 shrink-0">
-                              <div className="font-mono font-bold text-[#E30613] text-xl">€{Number(s.price_eur).toFixed(2)}</div>
-                              {selectedService?.id===s.id && <Check className="w-5 h-5 text-[#E30613] ml-auto mt-2"/>}
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
+                  <p className="mt-4 text-[#C9C9D1] text-[11px] font-mono uppercase tracking-widest">{ADDON_POLISH_NOTE}</p>
                   <div className="mt-6 flex justify-end">
                     <button disabled={!selectedService} onClick={()=>setStep(2)}
                       className="flex items-center gap-2 bg-[#E30613] disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-8 py-3 hover:bg-[#c0000f] transition-colors min-h-[48px]">

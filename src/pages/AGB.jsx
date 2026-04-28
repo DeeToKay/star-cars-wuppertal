@@ -25,14 +25,17 @@ export default function AGB() {
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 3 Zahlung</h2>
-            <p>Die Zahlung erfolgt ausschließlich vor Ort bei Abholung des Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Es wird keine Vorkasse erhoben. Alle Preise sind Endpreise in Euro (€) inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar).</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 3 Preise & Zahlung</h2>
+            <p>Es gelten die zum Zeitpunkt der Buchung auf der Website angegebenen Festpreise der Pakete <strong className="text-white">BASIC (79 €)</strong>, <strong className="text-white">STANDARD (159 €)</strong>, <strong className="text-white">DELUXE (269 €)</strong> und <strong className="text-white">EXCLUSIVE (999 €)</strong>. Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar).</p>
+            <p className="mt-3">Zusätzliche Politurgänge, die über den Leistungsumfang des gebuchten Pakets hinausgehen, werden mit jeweils <strong className="text-white">89,00 €</strong> berechnet und vor Ausführung mit dem Auftraggeber abgestimmt.</p>
+            <p className="mt-3">Die Zahlung erfolgt ausschließlich vor Ort bei Abholung des Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Eine Vorkasse oder Reservierungsgebühr wird nicht erhoben.</p>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung</h2>
-            <p>Stornierungen sind <strong className="text-white">jederzeit kostenfrei</strong> möglich. Es entstehen weder Stornogebühren noch sonstige Kosten – auch nicht bei kurzfristiger Absage oder Nichterscheinen.</p>
-            <p className="mt-3">Eine Stornierung kann per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> oder telefonisch unter <a href="tel:01726871641" className="text-[#E30613]">01726871641</a> erfolgen. Der Anbieter bittet im Sinne einer fairen Terminplanung um eine möglichst rechtzeitige Mitteilung, damit der Termin neu vergeben werden kann.</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung & Terminänderung</h2>
+            <p>Stornierungen und Terminverschiebungen sind <strong className="text-white">jederzeit kostenfrei</strong> möglich. Es entstehen weder Stornogebühren noch sonstige Kosten – auch nicht bei kurzfristiger Absage oder Nichterscheinen.</p>
+            <p className="mt-3">Eine Stornierung oder Umbuchung kann per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> oder telefonisch unter <a href="tel:01726871641" className="text-[#E30613]">01726871641</a> erfolgen. Im Sinne einer fairen Terminplanung bitten wir um eine möglichst rechtzeitige Mitteilung, damit der Termin neu vergeben werden kann.</p>
+            <p className="mt-3">Bereits begonnene oder vollständig erbrachte Leistungen können nicht mehr storniert werden (siehe § 5).</p>
           </section>
 
           <section>

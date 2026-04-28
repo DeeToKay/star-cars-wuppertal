@@ -17,6 +17,7 @@ const BookingSuccess = lazy(() => import('./pages/BookingSuccess'));
 const CustomerDashboard = lazy(() => import('./pages/CustomerDashboard'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminGallery = lazy(() => import('./pages/AdminGallery'));
+const AdminServices = lazy(() => import('./pages/AdminServices'));
 const Galerie = lazy(() => import('./pages/Galerie'));
 const Impressum = lazy(() => import('./pages/Impressum'));
 const Datenschutz = lazy(() => import('./pages/Datenschutz'));
@@ -65,6 +66,7 @@ const AuthenticatedApp = () => {
         <Route path="/agb" element={<AGB />} />
         <Route path="/galerie" element={<Galerie />} />
         <Route path="/admin/gallery" element={<AdminGallery />} />
+        <Route path="/admin/services" element={<AdminServices />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Suspense>
