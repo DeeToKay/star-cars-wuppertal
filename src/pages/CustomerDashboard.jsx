@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Calendar, Clock, CheckCircle, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
+import { Calendar, Clock, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 

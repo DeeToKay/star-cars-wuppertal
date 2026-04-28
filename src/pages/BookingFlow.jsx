@@ -122,13 +122,15 @@ export default function BookingFlow() {
         license_plate: licensePlate.trim().toUpperCase(),
         agb_accepted: true,
       });
-      if (response.data?.success) {
+      const data = response?.data ?? response;
+      if (data?.success) {
         navigate("/booking-success");
       } else {
-        setError(response.data?.error || "Fehler beim Erstellen der Buchung.");
+        setError(data?.error || "Fehler beim Erstellen der Buchung. Bitte später erneut versuchen.");
       }
     } catch (e) {
-      setError(e.message || "Unbekannter Fehler. Bitte versuchen Sie es erneut.");
+      const apiMsg = e?.response?.data?.error || e?.data?.error;
+      setError(apiMsg || e?.message || "Unbekannter Fehler. Bitte versuchen Sie es erneut.");
     }
     setSubmitting(false);
   };

@@ -17,8 +17,8 @@ export default function Impressum() {
             <p className="text-white font-semibold">Star Cars</p>
           </div>
           <div>
-            <p>Ronsdorferstr. 57</p>
-            <p>42283 Wuppertal</p>
+            <p>Ronsdorfer Str. 57</p>
+            <p>42119 Wuppertal</p>
             <p className="text-[#A1A1AA] text-xs">(an der StarTankstelle)</p>
           </div>
           <div>
@@ -40,7 +40,7 @@ export default function Impressum() {
           </div>
           <div className="pt-4 border-t border-white/10">
             <p className="text-white font-bold mb-2">Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV:</p>
-            <p>Kilic Savas, Ronsdorferstr. 57, 42283 Wuppertal</p>
+            <p>Kilic Savas, Ronsdorfer Str. 57, 42119 Wuppertal</p>
           </div>
           <div className="pt-4 border-t border-white/10 text-xs">
             <p>Haftungshinweis: Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>

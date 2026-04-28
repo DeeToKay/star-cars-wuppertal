@@ -37,7 +37,7 @@ export default function CookieBanner() {
             <div className="flex justify-between">
               <div>
                 <strong className="text-white">Notwendige Cookies</strong>
-                <p>Session, Authentifizierung, Stripe-Zahlung. Können nicht deaktiviert werden.</p>
+                <p>Session und Authentifizierung. Können nicht deaktiviert werden.</p>
               </div>
               <span className="text-green-400 font-mono text-xs font-bold shrink-0 ml-4">AKTIV</span>
             </div>

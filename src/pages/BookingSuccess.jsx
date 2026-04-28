@@ -33,7 +33,7 @@ export default function BookingSuccess() {
               <MapPin className="w-4 h-4 text-[#E30613] mt-0.5 shrink-0"/>
               <div>
                 <div className="text-white font-bold text-sm">Star Cars Wuppertal</div>
-                <div className="text-[#A1A1AA] text-sm">Ronsdorferstr. 57, 42283 Wuppertal</div>
+                <div className="text-[#A1A1AA] text-sm">Ronsdorfer Str. 57, 42119 Wuppertal</div>
                 <div className="text-[#A1A1AA] text-xs">(an der StarTankstelle)</div>
               </div>
             </div>
@@ -43,7 +43,7 @@ export default function BookingSuccess() {
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-4 h-4 text-[#E30613] shrink-0"/>
-              <div className="text-[#A1A1AA] text-sm">Stornierung kostenlos bis 24 h vor Termin per E-Mail oder Telefon</div>
+              <div className="text-[#A1A1AA] text-sm">Stornierung jederzeit kostenfrei – per E-Mail oder Telefon</div>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-[#E30613] shrink-0"/>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List, Upload } from "lucide-react";
 import Navbar from "../components/Navbar";
-import AdminFilters, { STATUS_CONFIG, STATUSES } from "../components/admin/AdminFilters";
+import AdminFilters, { STATUSES } from "../components/admin/AdminFilters";
 import BookingTable from "../components/admin/BookingTable";
 
 function exportCSV(bookings) {

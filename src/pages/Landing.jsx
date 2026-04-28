@@ -7,8 +7,9 @@ const FAQ_ITEMS = [
   { q: "Wie buche ich einen Termin?", a: "Wählen Sie Ihren Service auf dieser Seite, klicken Sie auf 'Jetzt buchen', wählen Sie Datum & Uhrzeit und geben Sie Ihre Kontaktdaten ein. Die Buchung dauert nur 2 Minuten – keine Anmeldung erforderlich." },
   { q: "Was kostet welche Leistung?", a: "Express-Reinigung ab €39,99 (45 Min.), Premium Detailing ab €149,99 (3 Std.), Smart Repair ab €199,99 (4 Std.), VIP Komplettpaket ab €349,99 (6 Std.). Festpreise, keine versteckten Kosten." },
   { q: "Wie lange dauert eine Aufbereitung?", a: "Das hängt vom gewählten Service ab: Express 45 Min., Premium Detailing 3 Std., Smart Repair 4 Std., VIP Komplett 6 Std. Wir benachrichtigen Sie per E-Mail, sobald Ihr Fahrzeug fertig ist." },
-  { q: "Wie komme ich zur Werkstatt & wo parke ich?", a: "Sie finden uns direkt an der StarTankstelle, Ronsdorferstr. 57, 42283 Wuppertal. Parkplätze sind direkt vor Ort vorhanden. Mit dem Bus: Haltestelle in der Nähe. Navigationsadresse: Ronsdorferstr. 57, Wuppertal." },
-  { q: "Wie kann ich stornieren?", a: "Kostenlose Stornierung bis 24 Stunden vor Termin – per E-Mail an info@starcarswuppertal.com oder telefonisch unter 01726871641. Bei Stornierung weniger als 24 h vor Termin oder No-Show fällt eine Bearbeitungspauschale von 20% an." },
+  { q: "Wie komme ich zur Werkstatt & wo parke ich?", a: "Sie finden uns direkt an der StarTankstelle, Ronsdorfer Str. 57, 42119 Wuppertal. Parkplätze sind direkt vor Ort vorhanden. Mit dem Bus: Haltestelle in der Nähe. Navigationsadresse: Ronsdorfer Str. 57, 42119 Wuppertal." },
+  { q: "Wie kann ich stornieren?", a: "Stornierungen sind jederzeit kostenlos – per E-Mail an info@starcarswuppertal.com oder telefonisch unter 01726871641. Es fallen keine Gebühren an." },
+  { q: "Wie bezahle ich?", a: "Die Zahlung erfolgt ausschließlich vor Ort bei Abholung Ihres Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Es wird keine Vorkasse erhoben und keine Reservierungsgebühr berechnet." },
 ];
 
 function FaqSection() {
@@ -105,7 +106,7 @@ export default function Landing() {
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-px bg-[#E10600]" />
               <span className="text-[#E10600] text-sm font-mono tracking-[0.25em] uppercase">
-                Wuppertal · Ronsdorferstr. 57
+                Wuppertal · Ronsdorfer Str. 57
               </span>
             </div>
 
@@ -165,9 +166,9 @@ export default function Landing() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: Star, title: "Über 5.000 Premium-Aufbereitungen", desc: "Jahrelange Erfahrung in Wuppertal und Umgebung." },
-              { icon: MapPin, title: "Direkt an der StarTankstelle", desc: "Ronsdorferstr. 57, Wuppertal – mit Parkplatz." },
+              { icon: MapPin, title: "Direkt an der StarTankstelle", desc: "Ronsdorfer Str. 57, 42119 Wuppertal – mit Parkplatz." },
               { icon: CreditCard, title: "Zahlung vor Ort", desc: "Bar oder per Karte bei Abholung – keine Vorkasse." },
-              { icon: CheckCircle, title: "Kostenlose Stornierung bis 24 h", desc: "Flexibel stornieren – per E-Mail oder Telefon." },
+              { icon: CheckCircle, title: "Kostenlose Stornierung", desc: "Jederzeit kostenfrei stornieren – ohne Gebühren." },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-4 p-5 border border-white/8 hover:border-[#E10600]/40 transition-colors">
                 <item.icon className="w-6 h-6 text-[#E10600] shrink-0 mt-0.5" />
@@ -349,10 +350,10 @@ export default function Landing() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-3xl font-black mb-4">So finden Sie uns</h2>
-              <p className="text-[#B5B5B5] mb-6 leading-relaxed">Wir befinden uns direkt an der StarTankstelle in Wuppertal-Ronsdorf. Ausreichend Parkplätze vorhanden.</p>
+              <p className="text-[#B5B5B5] mb-6 leading-relaxed">Wir befinden uns direkt an der StarTankstelle in Wuppertal-Elberfeld. Ausreichend Parkplätze vorhanden.</p>
               <div className="space-y-3">
                 {[
-                  ["📍", "Ronsdorferstr. 57, 42283 Wuppertal"],
+                  ["📍", "Ronsdorfer Str. 57, 42119 Wuppertal"],
                   ["📞", "01726871641"],
                   ["🕐", "Mo–Sa: 10:00–20:00 Uhr"],
                   ["✉️", "info@starcarswuppertal.com"],
@@ -365,7 +366,7 @@ export default function Landing() {
             </div>
             <div className="border border-white/10 overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2486.!2d7.199!3d51.239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8d8b4b5c5a5a5%3A0x5a5a5a5a5a5a5a5a!2sRonsdorferstr.+57%2C+42283+Wuppertal!5e0!3m2!1sde!2sde!4v1700000000000"
+                src="https://maps.google.com/maps?q=Ronsdorfer+Str.+57,+42119+Wuppertal&hl=de&z=15&output=embed"
                 width="100%" height="320" style={{ border: 0, filter: "grayscale(80%) invert(90%) contrast(90%)" }}
                 allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                 title="Star Cars Wuppertal Standort"

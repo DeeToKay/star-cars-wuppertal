@@ -33,7 +33,7 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-start gap-3 text-[#B5B5B5] text-sm">
                 <MapPin className="w-4 h-4 text-[#E10600] shrink-0 mt-0.5" />
-                <span>Ronsdorferstr. 57, 42283 Wuppertal<br /><span className="text-xs text-[#B5B5B5]/60">(an der StarTankstelle)</span></span>
+                <span>Ronsdorfer Str. 57, 42119 Wuppertal<br /><span className="text-xs text-[#B5B5B5]/60">(an der StarTankstelle)</span></span>
               </div>
               <div className="flex items-center gap-3 text-[#B5B5B5] text-sm">
                 <Phone className="w-4 h-4 text-[#E10600] shrink-0" />
@@ -56,7 +56,7 @@ export default function Footer() {
             <div className="space-y-2.5">
               <Link to="/impressum" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Impressum</Link>
               <Link to="/datenschutz" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Datenschutzerklärung</Link>
-              <Link to="/agb" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">AGB &amp; Stornierung</Link>
+              <Link to="/agb" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">AGB</Link>
               <Link to="/galerie" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Galerie</Link>
             </div>
           </div>
