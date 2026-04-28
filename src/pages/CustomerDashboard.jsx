@@ -56,7 +56,7 @@ export default function CustomerDashboard() {
           <h1 className="text-4xl font-black tracking-tight mb-2">
             Willkommen, {user?.full_name?.split(" ")[0] || "Kunde"}
           </h1>
-          <p className="text-[#A1A1AA] mb-10">Verwalten Sie Ihre Buchungen bei Star Cars Wuppertal.</p>
+          <p className="text-[#C9C9D1] mb-10">Verwalten Sie Ihre Buchungen bei Star Cars Wuppertal.</p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
@@ -69,7 +69,7 @@ export default function CustomerDashboard() {
                 <s.icon className="w-8 h-8 text-[#E30613]" />
                 <div>
                   <div className="text-2xl font-mono font-bold text-white">{s.value}</div>
-                  <div className="text-[#A1A1AA] text-xs">{s.label}</div>
+                  <div className="text-[#C9C9D1] text-xs">{s.label}</div>
                 </div>
               </div>
             ))}
@@ -86,7 +86,7 @@ export default function CustomerDashboard() {
             {upcoming.length === 0 ? (
               <div className="bg-[#161618] border border-white/10 p-10 text-center">
                 <Calendar className="w-10 h-10 text-white/20 mx-auto mb-3" />
-                <p className="text-[#A1A1AA]">Keine bevorstehenden Buchungen.</p>
+                <p className="text-[#C9C9D1]">Keine bevorstehenden Buchungen.</p>
                 <Link to="/booking" className="mt-4 inline-flex items-center gap-2 bg-[#E30613] text-white text-sm font-bold px-6 py-3 hover:bg-[#c0000f] transition-colors">
                   Jetzt buchen
                 </Link>
@@ -124,7 +124,7 @@ function BookingRow({ booking }) {
     <div className="bg-[#161618] border border-white/10 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <div className="font-bold text-white text-lg">{booking.service_name}</div>
-        <div className="flex items-center gap-4 mt-1 text-[#A1A1AA] text-sm">
+        <div className="flex items-center gap-4 mt-1 text-[#C9C9D1] text-sm">
           <span className="font-mono">{booking.appointment_date}</span>
           <span className="font-mono">{booking.appointment_time} Uhr</span>
           <span className="font-mono text-[#E30613]">€{Number(booking.service_price).toFixed(2)}</span>

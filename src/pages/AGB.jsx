@@ -11,9 +11,9 @@ export default function AGB() {
           <span className="text-[#E30613] text-xs font-mono tracking-widest uppercase">Rechtliches</span>
         </div>
         <h1 className="text-4xl font-black mb-2">Allgemeine Geschäftsbedingungen</h1>
-        <p className="text-[#A1A1AA] mb-10 text-sm">Stand: April 2026</p>
+        <p className="text-[#C9C9D1] mb-10 text-sm">Stand: April 2026</p>
 
-        <div className="text-[#A1A1AA] space-y-8 leading-relaxed text-sm">
+        <div className="text-[#C9C9D1] space-y-8 leading-relaxed text-sm">
           <section>
             <h2 className="text-white font-bold text-base mb-3">§ 1 Geltungsbereich</h2>
             <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge zwischen Kilic Savas (Einzelunternehmen), Star Cars, Ronsdorfer Str. 57, 42119 Wuppertal (nachfolgend „Anbieter") und dem Kunden (nachfolgend „Auftraggeber") über die Erbringung von Fahrzeugaufbereitungs- und Smart-Repair-Dienstleistungen.</p>

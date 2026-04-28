@@ -27,11 +27,11 @@ export default function BeforeAfterSlider({ before, after, label }) {
       onTouchMove={onTouchMove}
     >
       {/* After (full) */}
-      <img src={after} alt="Nach der Aufbereitung" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+      <img src={after} alt={label ? `${label} – nach der Aufbereitung` : "Nach der Aufbereitung"} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
 
       {/* Before (clipped) */}
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-        <img src={before} alt="Vor der Aufbereitung" className="absolute inset-0 w-full h-full object-cover" style={{ minWidth: "100vw", maxWidth: "none" }} draggable={false} />
+        <img src={before} alt={label ? `${label} – vor der Aufbereitung` : "Vor der Aufbereitung"} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" style={{ minWidth: "100vw", maxWidth: "none" }} draggable={false} />
       </div>
 
       {/* Divider */}

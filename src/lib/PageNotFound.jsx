@@ -11,7 +11,7 @@ export default function PageNotFound() {
           <div className="w-8 h-px bg-[#E30613]" />
         </div>
         <h1 className="text-3xl font-black mb-4">Diese Seite existiert nicht.</h1>
-        <p className="text-[#A1A1AA] mb-8 leading-relaxed">
+        <p className="text-[#C9C9D1] mb-8 leading-relaxed">
           Die angeforderte Seite konnte nicht gefunden werden. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück.
         </p>
         <Link to="/" className="inline-flex items-center gap-2 bg-[#E30613] text-white font-bold px-8 py-3 hover:bg-[#c0000f] transition-colors">

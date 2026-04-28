@@ -17,6 +17,7 @@ export default function LogoMark({ height = 56, footer = false }) {
         src={logoUrl}
         alt="Star Cars Wuppertal"
         style={{ height: `${height}px`, width: "auto" }}
+        decoding="async"
         className="object-contain"
       />
     );

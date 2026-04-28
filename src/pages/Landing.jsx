@@ -89,8 +89,11 @@ export default function Landing() {
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1800&q=90"
-            alt="Premium Fahrzeug"
+            src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1800&q=80&auto=format"
+            srcSet="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=900&q=75&auto=format 900w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1400&q=80&auto=format 1400w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1800&q=80&auto=format 1800w"
+            sizes="100vw"
+            alt="Premium Fahrzeug bei Star Cars Wuppertal"
+            fetchPriority="high"
             className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[#0B0B0B]/88 to-[#0B0B0B]/30" />
@@ -239,6 +242,8 @@ export default function Landing() {
                   <img
                     src={service.image}
                     alt={service.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-50 group-hover:brightness-60"
                   />
                 </div>
@@ -312,7 +317,7 @@ export default function Landing() {
       {/* ── CTA ── */}
       <section className="py-28 relative overflow-hidden bg-[#E10600]">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80" alt="" className="w-full h-full object-cover opacity-10" />
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=70&auto=format" alt="" loading="lazy" decoding="async" className="w-full h-full object-cover opacity-10" />
         </div>
         <div className="relative max-w-4xl mx-auto px-6 text-center">
           <motion.div

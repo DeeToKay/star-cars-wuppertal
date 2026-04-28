@@ -130,7 +130,7 @@ export default function AdminDashboard() {
       <div className="text-center">
         <AlertTriangle className="w-16 h-16 text-[#E30613] mx-auto mb-4" />
         <h2 className="text-2xl font-black text-white mb-2">Zugriff verweigert</h2>
-        <p className="text-[#A1A1AA]">Sie benötigen Admin-Rechte für diesen Bereich.</p>
+        <p className="text-[#C9C9D1]">Sie benötigen Admin-Rechte für diesen Bereich.</p>
       </div>
     </div>
   );
@@ -172,10 +172,10 @@ export default function AdminDashboard() {
               <div key={s.label} className="bg-[#161618] border border-white/10 p-5">
                 <div className="flex items-center justify-between mb-3">
                   <s.icon className="w-5 h-5 text-[#E30613]" />
-                  <span className="text-[#A1A1AA] text-xs">{s.label}</span>
+                  <span className="text-[#C9C9D1] text-xs">{s.label}</span>
                 </div>
                 <div className="font-mono font-bold text-2xl text-white">{s.value}</div>
-                <div className="text-[#A1A1AA] text-xs mt-1">{s.sub}</div>
+                <div className="text-[#C9C9D1] text-xs mt-1">{s.sub}</div>
               </div>
             ))}
           </div>
@@ -192,10 +192,10 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="flex border border-white/10 overflow-hidden shrink-0">
-              <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#A1A1AA] hover:text-white"}`}>
+              <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <List className="w-4 h-4" />
               </button>
-              <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#A1A1AA] hover:text-white"}`}>
+              <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="text-[#A1A1AA] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
+          <div className="text-[#C9C9D1] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
 
           <BookingTable
             bookings={filtered}

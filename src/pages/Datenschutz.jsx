@@ -11,9 +11,9 @@ export default function Datenschutz() {
           <span className="text-[#E30613] text-xs font-mono tracking-widest uppercase">Rechtliches</span>
         </div>
         <h1 className="text-4xl font-black mb-2">Datenschutzerklärung</h1>
-        <p className="text-[#A1A1AA] mb-10 text-sm">Stand: April 2026 · DSGVO-konform</p>
+        <p className="text-[#C9C9D1] mb-10 text-sm">Stand: April 2026 · DSGVO-konform</p>
 
-        <div className="text-[#A1A1AA] space-y-8 leading-relaxed text-sm">
+        <div className="text-[#C9C9D1] space-y-8 leading-relaxed text-sm">
           <section>
             <h2 className="text-white font-bold text-base mb-3">1. Verantwortlicher</h2>
             <p>Kilic Savas (Einzelunternehmen), Star Cars, Ronsdorfer Str. 57, 42119 Wuppertal<br />

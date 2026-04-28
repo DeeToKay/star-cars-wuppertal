@@ -149,8 +149,8 @@ export default function BookingFlow() {
           <div className="flex items-center gap-0 flex-wrap gap-y-2">
             {STEPS.map((label, i) => (
               <div key={label} className="flex items-center">
-                <div className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all ${step===i+1?"text-white":step>i+1?"text-[#E30613]":"text-[#A1A1AA]"}`}>
-                  <div className={`w-6 h-6 flex items-center justify-center text-xs font-bold border transition-all ${step>i+1?"border-[#E30613] bg-[#E30613] text-white":step===i+1?"border-white text-white":"border-white/20 text-[#A1A1AA]"}`}>
+                <div className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all ${step===i+1?"text-white":step>i+1?"text-[#E30613]":"text-[#C9C9D1]"}`}>
+                  <div className={`w-6 h-6 flex items-center justify-center text-xs font-bold border transition-all ${step>i+1?"border-[#E30613] bg-[#E30613] text-white":step===i+1?"border-white text-white":"border-white/20 text-[#C9C9D1]"}`}>
                     {step>i+1?<Check className="w-3 h-3"/>:i+1}
                   </div>
                   <span className="hidden sm:block">{label}</span>
@@ -179,8 +179,8 @@ export default function BookingFlow() {
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="font-bold text-white text-lg">{s.name}</div>
-                              <div className="text-[#A1A1AA] text-sm mt-1">{s.description}</div>
-                              <div className="flex items-center gap-1 text-[#A1A1AA] text-xs mt-2">
+                              <div className="text-[#C9C9D1] text-sm mt-1">{s.description}</div>
+                              <div className="flex items-center gap-1 text-[#C9C9D1] text-xs mt-2">
                                 <Clock className="w-3 h-3"/><span>{s.duration_minutes} Min.</span>
                               </div>
                             </div>
@@ -208,12 +208,12 @@ export default function BookingFlow() {
                   <h2 className="text-2xl font-black mb-6">Datum & Uhrzeit</h2>
                   <div className="bg-[#161618] border border-white/10 p-5 mb-5">
                     <div className="flex items-center justify-between mb-5">
-                      <button onClick={prevMonth} className="text-[#A1A1AA] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">‹</button>
+                      <button onClick={prevMonth} className="text-[#C9C9D1] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">‹</button>
                       <span className="font-bold text-white">{monthNames[calMonth]} {calYear}</span>
-                      <button onClick={nextMonth} className="text-[#A1A1AA] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">›</button>
+                      <button onClick={nextMonth} className="text-[#C9C9D1] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">›</button>
                     </div>
                     <div className="grid grid-cols-7 gap-1 mb-2">
-                      {dayNames.map(d => <div key={d} className="text-center text-[#A1A1AA] text-xs font-mono py-1">{d}</div>)}
+                      {dayNames.map(d => <div key={d} className="text-center text-[#C9C9D1] text-xs font-mono py-1">{d}</div>)}
                     </div>
                     <div className="grid grid-cols-7 gap-1">
                       {Array.from({length:adjustedFirstDay}).map((_,i)=><div key={`e${i}`}/>)}
@@ -231,7 +231,7 @@ export default function BookingFlow() {
 
                   {selectedDate && (
                     <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>
-                      <h3 className="text-xs font-bold text-[#A1A1AA] uppercase tracking-widest mb-3 font-mono">Verfügbare Zeiten</h3>
+                      <h3 className="text-xs font-bold text-[#C9C9D1] uppercase tracking-widest mb-3 font-mono">Verfügbare Zeiten</h3>
                       <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                         {getAvailableSlots(selectedService?.duration_minutes||60).map(t=>{
                           const count=slotCounts[t]||0, full=count>=MAX_BAYS;
@@ -243,7 +243,7 @@ export default function BookingFlow() {
                           );
                         })}
                       </div>
-                      <div className="flex items-center gap-4 mt-3 text-xs text-[#A1A1AA]">
+                      <div className="flex items-center gap-4 mt-3 text-xs text-[#C9C9D1]">
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/20 inline-block"/> Frei</span>
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-yellow-500/40 inline-block"/> Teilweise belegt</span>
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/5 opacity-30 inline-block"/> Ausgebucht</span>
@@ -252,7 +252,7 @@ export default function BookingFlow() {
                   )}
 
                   <div className="mt-6 flex justify-between">
-                    <button onClick={()=>setStep(1)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(1)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button disabled={!selectedDate||!selectedTime} onClick={()=>setStep(3)}
@@ -272,7 +272,7 @@ export default function BookingFlow() {
                     <input ref={honeypotRef} type="text" name="website" autoComplete="off" className="hidden" tabIndex={-1}/>
 
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-[#A1A1AA] mb-2">Name <span className="text-[#E30613]">*</span></label>
+                      <label htmlFor="name" className="block text-sm font-medium text-[#C9C9D1] mb-2">Name <span className="text-[#E30613]">*</span></label>
                       <input id="name" type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Mustermann"
                         autoComplete="name"
                         aria-invalid={!!fieldErrors.name}
@@ -281,7 +281,7 @@ export default function BookingFlow() {
                       {fieldErrors.name && <p id="name-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.name}</p>}
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-[#A1A1AA] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
+                      <label htmlFor="email" className="block text-sm font-medium text-[#C9C9D1] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
                       <input id="email" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="max@beispiel.de"
                         autoComplete="email" inputMode="email"
                         readOnly={!!user?.email}
@@ -291,7 +291,7 @@ export default function BookingFlow() {
                       {fieldErrors.email && <p id="email-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.email}</p>}
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-[#A1A1AA] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
+                      <label htmlFor="phone" className="block text-sm font-medium text-[#C9C9D1] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
                       <input id="phone" type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+49 202 123456"
                         autoComplete="tel" inputMode="tel"
                         aria-invalid={!!fieldErrors.phone}
@@ -300,8 +300,8 @@ export default function BookingFlow() {
                       {fieldErrors.phone && <p id="phone-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.phone}</p>}
                     </div>
                     <div>
-                      <label htmlFor="license" className="block text-sm font-medium text-[#A1A1AA] mb-2">
-                        <Car className="w-3 h-3 inline mr-1"/>Kennzeichen <span className="text-[#A1A1AA] font-normal">(optional)</span>
+                      <label htmlFor="license" className="block text-sm font-medium text-[#C9C9D1] mb-2">
+                        <Car className="w-3 h-3 inline mr-1"/>Kennzeichen <span className="text-[#C9C9D1] font-normal">(optional)</span>
                       </label>
                       <input id="license" type="text" value={licensePlate} onChange={e=>setLicensePlate(e.target.value.toUpperCase())} placeholder="WU AB 1234" maxLength={12}
                         aria-invalid={!!fieldErrors.licensePlate}
@@ -318,7 +318,7 @@ export default function BookingFlow() {
                   </div>
 
                   <div className="mt-6 flex justify-between">
-                    <button onClick={()=>setStep(2)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(2)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button disabled={!name.trim()||!email.trim()||!phone.trim()} onClick={()=>{setError("");setStep(4);}}
@@ -334,7 +334,7 @@ export default function BookingFlow() {
                 <motion.div key="s4" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="text-2xl font-black mb-6">Buchung bestätigen</h2>
                   <div className="bg-[#161618] border border-white/10 p-6 mb-5">
-                    <h3 className="text-[#A1A1AA] text-xs font-mono tracking-widest uppercase mb-5">Übersicht</h3>
+                    <h3 className="text-[#C9C9D1] text-xs font-mono tracking-widest uppercase mb-5">Übersicht</h3>
                     <div className="space-y-3">
                       {[
                         ["Service", selectedService?.name],
@@ -347,7 +347,7 @@ export default function BookingFlow() {
                         ...(licensePlate ? [["Kennzeichen", licensePlate]] : []),
                       ].map(([k,v]) => (
                         <div key={k} className="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
-                          <span className="text-[#A1A1AA] text-sm">{k}</span>
+                          <span className="text-[#C9C9D1] text-sm">{k}</span>
                           <span className="text-white font-mono text-sm">{v}</span>
                         </div>
                       ))}
@@ -363,7 +363,7 @@ export default function BookingFlow() {
                     <span className="text-2xl">💳</span>
                     <div>
                       <div className="text-white font-bold text-sm">Zahlung vor Ort</div>
-                      <div className="text-[#A1A1AA] text-xs mt-1">Bar oder per Karte bei Abholung Ihres Fahrzeugs. Keine Vorkasse erforderlich.</div>
+                      <div className="text-[#C9C9D1] text-xs mt-1">Bar oder per Karte bei Abholung Ihres Fahrzeugs. Keine Vorkasse erforderlich.</div>
                     </div>
                   </div>
 
@@ -373,7 +373,7 @@ export default function BookingFlow() {
                       onClick={()=>setAgbAccepted(v=>!v)}>
                       {agbAccepted && <Check className="w-3 h-3 text-white"/>}
                     </div>
-                    <span className="text-sm text-[#A1A1AA] leading-relaxed">
+                    <span className="text-sm text-[#C9C9D1] leading-relaxed">
                       Ich akzeptiere die <Link to="/agb" target="_blank" className="text-[#E30613] hover:underline">AGB</Link> und habe die <Link to="/datenschutz" target="_blank" className="text-[#E30613] hover:underline">Datenschutzerklärung</Link> zur Kenntnis genommen.
                     </span>
                   </label>
@@ -385,7 +385,7 @@ export default function BookingFlow() {
                   )}
 
                   <div className="flex justify-between">
-                    <button onClick={()=>setStep(3)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(3)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button onClick={handleSubmit} disabled={submitting||!agbAccepted}
@@ -414,18 +414,18 @@ export default function BookingFlow() {
                   {l:"Dauer", v:selectedService?`${selectedService.duration_minutes} Min.`:"—"},
                 ].map(({l,v})=>(
                   <div key={l}>
-                    <div className="text-[#A1A1AA] text-xs uppercase tracking-wider mb-1">{l}</div>
+                    <div className="text-[#C9C9D1] text-xs uppercase tracking-wider mb-1">{l}</div>
                     <div className="text-white font-mono text-sm">{v}</div>
                   </div>
                 ))}
                 <div className="pt-3 border-t border-white/10">
                   <div className="flex justify-between items-center">
-                    <span className="text-[#A1A1AA] text-sm">Gesamt</span>
+                    <span className="text-[#C9C9D1] text-sm">Gesamt</span>
                     <span className="text-[#E30613] font-mono font-bold text-xl">
                       {selectedService?`€${Number(selectedService.price_eur).toFixed(2)}`:"—"}
                     </span>
                   </div>
-                  <div className="text-[#A1A1AA] text-xs mt-2">💳 Zahlung vor Ort</div>
+                  <div className="text-[#C9C9D1] text-xs mt-2">💳 Zahlung vor Ort</div>
                 </div>
               </div>
             </div>

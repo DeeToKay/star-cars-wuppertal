@@ -24,7 +24,7 @@ export default function BookingSuccess() {
             <div className="w-8 h-px bg-[#E30613]" />
           </div>
           <h1 className="text-4xl font-black tracking-tight mb-4">Reservierung erfolgreich!</h1>
-          <p className="text-[#A1A1AA] text-lg leading-relaxed mb-8">
+          <p className="text-[#C9C9D1] text-lg leading-relaxed mb-8">
             Ihre Reservierung bei Star Cars Wuppertal wurde bestätigt. Sie erhalten gleich eine Bestätigungs-E-Mail.
           </p>
 
@@ -33,25 +33,25 @@ export default function BookingSuccess() {
               <MapPin className="w-4 h-4 text-[#E30613] mt-0.5 shrink-0"/>
               <div>
                 <div className="text-white font-bold text-sm">Star Cars Wuppertal</div>
-                <div className="text-[#A1A1AA] text-sm">Ronsdorfer Str. 57, 42119 Wuppertal</div>
-                <div className="text-[#A1A1AA] text-xs">(an der StarTankstelle)</div>
+                <div className="text-[#C9C9D1] text-sm">Ronsdorfer Str. 57, 42119 Wuppertal</div>
+                <div className="text-[#C9C9D1] text-xs">(an der StarTankstelle)</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <CreditCard className="w-4 h-4 text-[#E30613] shrink-0"/>
-              <div className="text-[#A1A1AA] text-sm"><span className="text-white font-bold">Zahlung vor Ort</span> – bar oder per Karte bei Abholung</div>
+              <div className="text-[#C9C9D1] text-sm"><span className="text-white font-bold">Zahlung vor Ort</span> – bar oder per Karte bei Abholung</div>
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-4 h-4 text-[#E30613] shrink-0"/>
-              <div className="text-[#A1A1AA] text-sm">Stornierung jederzeit kostenfrei – per E-Mail oder Telefon</div>
+              <div className="text-[#C9C9D1] text-sm">Stornierung jederzeit kostenfrei – per E-Mail oder Telefon</div>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-[#E30613] shrink-0"/>
-              <a href="tel:01726871641" className="text-[#A1A1AA] text-sm hover:text-white transition-colors">01726871641</a>
+              <a href="tel:01726871641" className="text-[#C9C9D1] text-sm hover:text-white transition-colors">01726871641</a>
             </div>
           </div>
 
-          <p className="text-[#A1A1AA] text-sm mb-8">Wir benachrichtigen Sie per E-Mail, sobald Ihr Fahrzeug fertig ist.</p>
+          <p className="text-[#C9C9D1] text-sm mb-8">Wir benachrichtigen Sie per E-Mail, sobald Ihr Fahrzeug fertig ist.</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/dashboard" className="flex items-center justify-center gap-2 bg-[#E30613] text-white font-bold px-8 py-3 hover:bg-[#c0000f] transition-colors min-h-[48px]">

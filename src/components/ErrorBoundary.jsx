@@ -35,7 +35,7 @@ export default class ErrorBoundary extends React.Component {
             <AlertTriangle className="w-8 h-8 text-[#E30613]" />
           </div>
           <h1 className="text-2xl font-black mb-3">Etwas ist schiefgelaufen</h1>
-          <p className="text-[#A1A1AA] text-sm mb-8 leading-relaxed">
+          <p className="text-[#C9C9D1] text-sm mb-8 leading-relaxed">
             Es ist ein unerwarteter Fehler aufgetreten. Bitte laden Sie die Seite neu oder kehren Sie zur Startseite zurück.
             Falls das Problem bestehen bleibt, kontaktieren Sie uns unter{" "}
             <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613] underline">

@@ -11,7 +11,7 @@ export default function Impressum() {
           <span className="text-[#E30613] text-xs font-mono tracking-widest uppercase">Rechtliches</span>
         </div>
         <h1 className="text-4xl font-black mb-8">Impressum</h1>
-        <div className="text-[#A1A1AA] space-y-5 leading-relaxed text-sm">
+        <div className="text-[#C9C9D1] space-y-5 leading-relaxed text-sm">
           <div>
             <p className="text-white font-bold text-base">Kilic Savas (Einzelunternehmen)</p>
             <p className="text-white font-semibold">Star Cars</p>
@@ -19,7 +19,7 @@ export default function Impressum() {
           <div>
             <p>Ronsdorfer Str. 57</p>
             <p>42119 Wuppertal</p>
-            <p className="text-[#A1A1AA] text-xs">(an der StarTankstelle)</p>
+            <p className="text-[#C9C9D1] text-xs">(an der StarTankstelle)</p>
           </div>
           <div>
             <p>Telefon: <a href="tel:01726871641" className="text-[#E30613]">01726871641</a></p>
