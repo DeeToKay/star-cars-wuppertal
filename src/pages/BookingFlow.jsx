@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { ArrowRight, ArrowLeft, Check, Clock, AlertCircle, Loader2, Car } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { validateContact } from "@/lib/booking-schema";
 
 const ALL_TIME_SLOTS = [
   "10:00","10:30","11:00","11:30","12:00","12:30",
@@ -24,13 +25,6 @@ function getAvailableSlots(durationMinutes) {
 
 function getDaysInMonth(year, month) { return new Date(year, month + 1, 0).getDate(); }
 function getFirstDayOfMonth(year, month) { return new Date(year, month, 1).getDay(); }
-
-function validatePhone(phone) {
-  return /^[\d\s\+\-\(\)]{7,20}$/.test(phone.trim());
-}
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
 
 const STEPS = ["Service", "Datum & Zeit", "Kontaktdaten", "Bestätigen"];
 const MAX_BAYS = 3;
@@ -59,6 +53,7 @@ export default function BookingFlow() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const honeypotRef = useRef(null);
 
   useEffect(() => {
@@ -97,16 +92,19 @@ export default function BookingFlow() {
   const handleDateSelect = (day) => { if (isDayDisabled(day)) return; setSelectedDate(fmtDate(calYear, calMonth, day)); setSelectedTime(null); };
 
   const handleSubmit = async () => {
-    // Honeypot check
+    // Honeypot check (silent fail for bots)
     if (honeypotRef.current?.value) return;
 
-    if (!name.trim()) { setError("Bitte geben Sie Ihren Namen ein."); return; }
-    if (!validateEmail(email)) { setError("Bitte eine gültige E-Mail-Adresse eingeben."); return; }
-    if (!validatePhone(phone)) { setError("Bitte eine gültige Telefonnummer eingeben (z.B. +49 202 123456)."); return; }
-    if (!agbAccepted) { setError("Bitte akzeptieren Sie die AGB und Datenschutzerklärung."); return; }
+    const validation = validateContact({ name, email, phone, licensePlate, agbAccepted });
+    if (!validation.ok) {
+      setFieldErrors(validation.fieldErrors);
+      setError(validation.message || "Bitte prüfen Sie Ihre Eingaben.");
+      return;
+    }
 
     setSubmitting(true);
     setError("");
+    setFieldErrors({});
     try {
       const response = await base44.functions.invoke("createBooking", {
         service_id: selectedService.id,
@@ -274,27 +272,42 @@ export default function BookingFlow() {
                     <input ref={honeypotRef} type="text" name="website" autoComplete="off" className="hidden" tabIndex={-1}/>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">Name <span className="text-[#E30613]">*</span></label>
-                      <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Mustermann"
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12"/>
+                      <label htmlFor="name" className="block text-sm font-medium text-[#A1A1AA] mb-2">Name <span className="text-[#E30613]">*</span></label>
+                      <input id="name" type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Mustermann"
+                        autoComplete="name"
+                        aria-invalid={!!fieldErrors.name}
+                        aria-describedby={fieldErrors.name ? "name-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${fieldErrors.name ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.name && <p id="name-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
-                      <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="max@beispiel.de"
+                      <label htmlFor="email" className="block text-sm font-medium text-[#A1A1AA] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
+                      <input id="email" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="max@beispiel.de"
+                        autoComplete="email" inputMode="email"
                         readOnly={!!user?.email}
-                        className={`w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12 ${user?.email?"opacity-60 cursor-not-allowed":""}`}/>
+                        aria-invalid={!!fieldErrors.email}
+                        aria-describedby={fieldErrors.email ? "email-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${user?.email?"opacity-60 cursor-not-allowed":""} ${fieldErrors.email ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.email && <p id="email-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
-                      <input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+49 202 123456"
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12"/>
+                      <label htmlFor="phone" className="block text-sm font-medium text-[#A1A1AA] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
+                      <input id="phone" type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+49 202 123456"
+                        autoComplete="tel" inputMode="tel"
+                        aria-invalid={!!fieldErrors.phone}
+                        aria-describedby={fieldErrors.phone ? "phone-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${fieldErrors.phone ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.phone && <p id="phone-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.phone}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
+                      <label htmlFor="license" className="block text-sm font-medium text-[#A1A1AA] mb-2">
                         <Car className="w-3 h-3 inline mr-1"/>Kennzeichen <span className="text-[#A1A1AA] font-normal">(optional)</span>
                       </label>
-                      <input type="text" value={licensePlate} onChange={e=>setLicensePlate(e.target.value.toUpperCase())} placeholder="WU AB 1234" maxLength={12}
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12 font-mono"/>
+                      <input id="license" type="text" value={licensePlate} onChange={e=>setLicensePlate(e.target.value.toUpperCase())} placeholder="WU AB 1234" maxLength={12}
+                        aria-invalid={!!fieldErrors.licensePlate}
+                        aria-describedby={fieldErrors.licensePlate ? "license-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 font-mono ${fieldErrors.licensePlate ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.licensePlate && <p id="license-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.licensePlate}</p>}
                     </div>
 
                     {error && (
