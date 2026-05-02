@@ -41,15 +41,17 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
+    // Wir akzeptieren die Felder zwar, vertrauen aber keinem Preis/Namen/Dauer
+    // aus dem Body — alles Service-bezogene wird gleich serverseitig nachgeladen.
     const {
-      service_id, service_name, service_price, service_duration,
+      service_id,
       appointment_date, appointment_time,
       phone_number, user_id, user_email, user_name,
       license_plate, agb_accepted,
     } = body;
 
     // ── Validation ────────────────────────────────────────────
-    if (!service_id || !service_name || service_price == null) {
+    if (!service_id) {
       return Response.json({ success: false, error: 'Service-Informationen unvollständig.' }, { status: 400 });
     }
     if (!appointment_date || !isValidDate(appointment_date)) {
@@ -77,28 +79,52 @@ Deno.serve(async (req) => {
       return Response.json({ success: false, error: 'Sonntags sind wir geschlossen.' }, { status: 400 });
     }
 
-    // Validate slot fits before closing time
-    const duration = Number(service_duration) || 60;
+    // ── Service serverseitig auflösen (kanonischer Preis/Name/Dauer) ──
+    let service: any = null;
+    try {
+      service = await base44.asServiceRole.entities.Service.get(service_id);
+    } catch (_) { /* nicht gefunden */ }
+    if (!service || service.is_active === false) {
+      return Response.json({ success: false, error: 'Service nicht verfügbar.' }, { status: 400 });
+    }
+    const canonicalName = String(service.name);
+    const canonicalPrice = Number(service.price_eur) || 0;
+    const duration = Number(service.duration_minutes) || 60;
+
     if (!isValidSlot(appointment_time, duration)) {
       return Response.json({ success: false, error: 'Der Service endet nach 20:00 Uhr. Bitte einen früheren Starttermin wählen.' }, { status: 400 });
     }
 
-    // ── Capacity check ────────────────────────────────────────
+    // ── Capacity check (Overlap-basiert) ──────────────────────
     let maxBays = MAX_BAYS;
     try {
       const settings = await base44.asServiceRole.entities.Settings.filter({ key: 'max_bays' });
       if (settings.length > 0) maxBays = parseInt(settings[0].value) || MAX_BAYS;
     } catch (_) { /* fallback to default */ }
 
-    const existingBookings = await base44.asServiceRole.entities.Booking.filter({
-      appointment_date,
-      appointment_time,
-    });
-    const activeBookings = existingBookings.filter((b: any) =>
+    const sameDayBookings = await base44.asServiceRole.entities.Booking.filter({ appointment_date });
+    const activeBookings = sameDayBookings.filter((b: any) =>
       b.status !== 'Cancelled' && b.status !== 'No-Show'
     );
 
-    if (activeBookings.length >= maxBays) {
+    // Service-Map für Bestandsdatensätze ohne service_duration_minutes
+    let durById: Record<string, number> = {};
+    try {
+      const services = await base44.asServiceRole.entities.Service.list();
+      durById = Object.fromEntries(services.map((s: any) => [s.id, Number(s.duration_minutes) || 60]));
+    } catch (_) { /* fallback to per-booking 60 */ }
+
+    const newStart = timeToMinutes(appointment_time);
+    const newEnd = newStart + duration;
+    const overlapping = activeBookings.filter((b: any) => {
+      if (!b.appointment_time) return false;
+      const bStart = timeToMinutes(b.appointment_time);
+      const bDur = Number(b.service_duration_minutes) || durById[b.service_id] || 60;
+      const bEnd = bStart + bDur;
+      return newStart < bEnd && newEnd > bStart;
+    });
+
+    if (overlapping.length >= maxBays) {
       return Response.json({ success: false, error: 'Dieser Zeitslot ist ausgebucht. Bitte wählen Sie eine andere Uhrzeit.' }, { status: 409 });
     }
 
@@ -108,8 +134,9 @@ Deno.serve(async (req) => {
       user_email: String(user_email).trim(),
       user_name: String(user_name).trim(),
       service_id,
-      service_name,
-      service_price: Number(service_price),
+      service_name: canonicalName,
+      service_price: canonicalPrice,
+      service_duration_minutes: duration,
       appointment_date,
       appointment_time,
       phone_number: String(phone_number).trim(),

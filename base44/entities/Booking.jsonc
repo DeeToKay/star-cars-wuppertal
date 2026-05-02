@@ -26,6 +26,10 @@
       "type": "number",
       "title": "Preis (EUR)"
     },
+    "service_duration_minutes": {
+      "type": "number",
+      "title": "Dauer (Minuten)"
+    },
     "appointment_date": {
       "type": "string",
       "format": "date",

@@ -113,9 +113,6 @@ export default function BookingFlow() {
     try {
       const response = await base44.functions.invoke("createBooking", {
         service_id: selectedService.id,
-        service_name: selectedService.name,
-        service_price: selectedService.price_eur,
-        service_duration: selectedService.duration_minutes,
         appointment_date: selectedDate,
         appointment_time: selectedTime,
         phone_number: phone.trim(),

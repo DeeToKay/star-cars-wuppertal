@@ -74,6 +74,14 @@ Star Cars Wuppertal`,
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+
+    // Nur Admins dürfen Benachrichtigungen auslösen — das Frontend
+    // ruft die Funktion ausschließlich aus dem Admin-Dashboard auf.
+    const me = await base44.auth.me().catch(() => null);
+    if (!me || me.role !== 'Admin') {
+      return Response.json({ success: false, error: 'Nicht autorisiert.' }, { status: 403 });
+    }
+
     const body = await req.json();
     const type: NotificationType = body.type;
     const bookingId: string | undefined = body.booking_id || body.event?.entity_id;
@@ -85,7 +93,8 @@ Deno.serve(async (req) => {
       return Response.json({ success: false, error: 'booking_id fehlt.' }, { status: 400 });
     }
 
-    const booking = body.data || await base44.asServiceRole.entities.Booking.get(bookingId);
+    // Buchung immer aus der DB laden; aufrufergesteuerte Daten werden ignoriert.
+    const booking = await base44.asServiceRole.entities.Booking.get(bookingId);
     if (!booking || !booking.user_email) {
       console.log('Booking or email not found:', bookingId);
       return Response.json({ success: false, error: 'Buchung oder E-Mail nicht gefunden.' }, { status: 404 });
