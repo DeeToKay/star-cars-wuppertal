@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Star, Clock, Shield, CreditCard, MapPin, CheckCircle, ChevronDown, Check } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { SERVICE_PACKAGES, ADDON_POLISH_NOTE } from "@/lib/services";
 
 const FAQ_ITEMS = [
@@ -19,9 +20,9 @@ function FaqSection() {
     <section className="py-20 bg-[#1A1A1A]">
       <div className="max-w-3xl mx-auto px-6">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-8 h-px bg-[#E10600]" />
-          <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">FAQ</span>
-          <div className="w-8 h-px bg-[#E10600]" />
+          <div className="w-8 h-px bg-[#E30613]" />
+          <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">FAQ</span>
+          <div className="w-8 h-px bg-[#E30613]" />
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-center mb-10">Häufige Fragen</h2>
         <div className="space-y-2">
@@ -30,7 +31,7 @@ function FaqSection() {
               <button onClick={() => setOpen(open === i ? null : i)}
                 className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-white/5 transition-colors min-h-[52px]">
                 <span className="font-bold text-white text-sm pr-4">{item.q}</span>
-                <ChevronDown className={`w-4 h-4 text-[#E10600] shrink-0 transition-transform ${open === i ? "rotate-180" : ""}`}/>
+                <ChevronDown className={`w-4 h-4 text-[#E30613] shrink-0 transition-transform ${open === i ? "rotate-180" : ""}`}/>
               </button>
               <AnimatePresence>
                 {open === i && (
@@ -50,9 +51,39 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import GallerySection from "../components/GallerySection";
 
-const SERVICES = SERVICE_PACKAGES;
+// Liefert für jeden DB-Eintrag die fürs Marketing-Layout erwarteten Felder
+// und greift dabei auf den statischen Katalog zurück, wenn ein Wert fehlt.
+function normalizeService(s) {
+  const fallback = SERVICE_PACKAGES.find(p => p.name === s.name) || {};
+  return {
+    name: s.name,
+    tagline: s.tagline || fallback.tagline || "",
+    description: s.description || fallback.description || "",
+    price_eur: Number(s.price_eur ?? fallback.price_eur ?? 0),
+    duration_label: s.duration_label || fallback.duration_label || `${s.duration_minutes || ""} Min.`,
+    badge: s.badge || fallback.badge || "",
+    features: Array.isArray(s.features) && s.features.length > 0 ? s.features : (fallback.features || []),
+    image: s.image_url || fallback.image,
+    tier: s.tier ?? fallback.tier ?? 0,
+  };
+}
 
 export default function Landing() {
+  // Erstes Paint zeigt sofort den statischen Katalog – sobald die DB
+  // antwortet, übernehmen die im Admin gepflegten Pakete.
+  const [services, setServices] = useState(SERVICE_PACKAGES);
+
+  useEffect(() => {
+    base44.entities.Service.list("tier")
+      .then(all => {
+        const active = (all || []).filter(s => s.is_active !== false);
+        if (active.length > 0) {
+          setServices(active.map(normalizeService));
+        }
+      })
+      .catch(() => { /* Fallback auf SERVICE_PACKAGES */ });
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-inter">
       <Navbar />
@@ -79,8 +110,8 @@ export default function Landing() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-px bg-[#E10600]" />
-              <span className="text-[#E10600] text-sm font-mono tracking-[0.25em] uppercase">
+              <div className="w-10 h-px bg-[#E30613]" />
+              <span className="text-[#E30613] text-sm font-mono tracking-[0.25em] uppercase">
                 Wuppertal · Ronsdorfer Str. 57
               </span>
             </div>
@@ -91,7 +122,7 @@ export default function Landing() {
               <span className="block text-3xl md:text-4xl lg:text-5xl text-[#C0C0C0] mt-2">in Wuppertal</span>
             </h1>
 
-            <div className="w-32 h-0.5 bg-[#E10600] mb-6" />
+            <div className="w-32 h-0.5 bg-[#E30613] mb-6" />
 
             <p className="text-xl text-[#B5B5B5] max-w-lg leading-relaxed mb-10">
               Festpreis. Fester Termin. Vorab buchen. — Professionelle Fahrzeugpflege auf höchstem Niveau.
@@ -100,7 +131,7 @@ export default function Landing() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/booking"
-                className="group inline-flex items-center gap-3 bg-[#E10600] text-white font-bold text-lg px-9 py-4 hover:bg-[#c00500] transition-all duration-200"
+                className="group inline-flex items-center gap-3 bg-[#E30613] text-white font-bold text-lg px-9 py-4 hover:bg-[#c0000f] transition-all duration-200"
               >
                 Jetzt Termin buchen
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -126,7 +157,7 @@ export default function Landing() {
               { val: "4.9 ★", label: "Kundenbewertung" },
               { val: "Mo–Sa", label: "10:00–20:00 Uhr" },
             ].map((s) => (
-              <div key={s.label} className="border-l-2 border-[#E10600] pl-4">
+              <div key={s.label} className="border-l-2 border-[#E30613] pl-4">
                 <div className="font-mono font-bold text-2xl text-white">{s.val}</div>
                 <div className="text-[#B5B5B5] text-sm">{s.label}</div>
               </div>
@@ -145,8 +176,8 @@ export default function Landing() {
               { icon: CreditCard, title: "Zahlung vor Ort", desc: "Bar oder per Karte bei Abholung – keine Vorkasse." },
               { icon: CheckCircle, title: "Kostenlose Stornierung", desc: "Jederzeit kostenfrei stornieren – ohne Gebühren." },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-4 p-5 border border-white/8 hover:border-[#E10600]/40 transition-colors">
-                <item.icon className="w-6 h-6 text-[#E10600] shrink-0 mt-0.5" />
+              <div key={i} className="flex items-start gap-4 p-5 border border-white/8 hover:border-[#E30613]/40 transition-colors">
+                <item.icon className="w-6 h-6 text-[#E30613] shrink-0 mt-0.5" />
                 <div>
                   <div className="font-bold text-white text-sm mb-1">{item.title}</div>
                   <div className="text-[#B5B5B5] text-xs leading-relaxed">{item.desc}</div>
@@ -161,9 +192,9 @@ export default function Landing() {
       <section className="py-20 bg-[#0B0B0B]">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-[#E10600]" />
-            <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">In 3 Schritten</span>
-            <div className="w-8 h-px bg-[#E10600]" />
+            <div className="w-8 h-px bg-[#E30613]" />
+            <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">In 3 Schritten</span>
+            <div className="w-8 h-px bg-[#E30613]" />
           </div>
           <h2 className="text-3xl md:text-4xl font-black mb-14">So einfach geht's</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -172,8 +203,8 @@ export default function Landing() {
               { num: "02", title: "Termin buchen", desc: "Datum und Uhrzeit wählen – alles in 2 Minuten online. Zahlung bequem vor Ort." },
               { num: "03", title: "Auto bringen", desc: "Einfach vorbeikommen, wir kümmern uns um alles. Sie erhalten eine Benachrichtigung wenn fertig." },
             ].map((step) => (
-              <div key={step.num} className="relative p-6 border border-white/10 hover:border-[#E10600]/40 transition-colors text-left">
-                <div className="font-mono text-5xl font-black text-[#E10600]/20 mb-4 leading-none">{step.num}</div>
+              <div key={step.num} className="relative p-6 border border-white/10 hover:border-[#E30613]/40 transition-colors text-left">
+                <div className="font-mono text-5xl font-black text-[#E30613]/20 mb-4 leading-none">{step.num}</div>
                 <h3 className="font-bold text-white text-lg mb-2">{step.title}</h3>
                 <p className="text-[#B5B5B5] text-sm leading-relaxed">{step.desc}</p>
               </div>
@@ -192,15 +223,15 @@ export default function Landing() {
             className="mb-14"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-px bg-[#E10600]" />
-              <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">Leistungen</span>
+              <div className="w-8 h-px bg-[#E30613]" />
+              <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">Leistungen</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">Unsere Pakete</h2>
             <p className="text-[#C9C9D1] mt-3 max-w-2xl">Vier transparente Festpreis-Pakete – vom schnellen Glanz bis zum Showroom-Finish.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#E10600]/10">
-            {SERVICES.map((service, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#E30613]/10">
+            {services.map((service, i) => (
               <motion.div
                 key={service.name}
                 initial={{ opacity: 0, y: 30 }}
@@ -210,9 +241,9 @@ export default function Landing() {
                 className="group bg-[#131313] overflow-hidden flex flex-col relative"
               >
                 {/* Red accent line top */}
-                <div className="h-0.5 bg-[#E10600]" />
+                <div className="h-0.5 bg-[#E30613]" />
                 {service.badge && (
-                  <span className="absolute top-3 right-3 z-10 bg-[#E10600] text-white text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-1">
+                  <span className="absolute top-3 right-3 z-10 bg-[#E30613] text-white text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-1">
                     {service.badge}
                   </span>
                 )}
@@ -228,7 +259,7 @@ export default function Landing() {
                 <div className="p-6 flex flex-col flex-1">
                   <h3 className="text-2xl font-black text-white tracking-wide">{service.name}</h3>
                   <div className="flex items-baseline gap-2 mt-1 mb-3">
-                    <span className="font-mono font-bold text-[#E10600] text-3xl">{service.price_eur} €</span>
+                    <span className="font-mono font-bold text-[#E30613] text-3xl">{service.price_eur} €</span>
                   </div>
                   {service.tagline && (
                     <p className="text-white font-semibold text-sm uppercase tracking-wide mb-2">{service.tagline}</p>
@@ -238,7 +269,7 @@ export default function Landing() {
                   <ul className="space-y-2 mb-5">
                     {service.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-[#C9C9D1] text-xs leading-relaxed">
-                        <Check className="w-3.5 h-3.5 text-[#E10600] shrink-0 mt-0.5" />
+                        <Check className="w-3.5 h-3.5 text-[#E30613] shrink-0 mt-0.5" />
                         <span>{f}</span>
                       </li>
                     ))}
@@ -251,7 +282,7 @@ export default function Landing() {
                     </div>
                     <Link
                       to="/booking"
-                      className="inline-flex w-full items-center justify-center gap-2 bg-[#E10600] text-white font-bold px-6 py-3 hover:bg-[#c00500] transition-colors text-sm"
+                      className="inline-flex w-full items-center justify-center gap-2 bg-[#E30613] text-white font-bold px-6 py-3 hover:bg-[#c0000f] transition-colors text-sm"
                     >
                       Jetzt buchen <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -280,9 +311,9 @@ export default function Landing() {
             className="text-center mb-14"
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-8 h-px bg-[#E10600]" />
-              <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">Warum Star Cars</span>
-              <div className="w-8 h-px bg-[#E10600]" />
+              <div className="w-8 h-px bg-[#E30613]" />
+              <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">Warum Star Cars</span>
+              <div className="w-8 h-px bg-[#E30613]" />
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight">Premium Standard</h2>
           </motion.div>
@@ -300,9 +331,9 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="p-6 border border-white/10 hover:border-[#E10600]/50 transition-all duration-300"
+                className="p-6 border border-white/10 hover:border-[#E30613]/50 transition-all duration-300"
               >
-                <item.icon className="w-8 h-8 text-[#E10600] mb-4" />
+                <item.icon className="w-8 h-8 text-[#E30613] mb-4" />
                 <div className="w-8 h-px bg-[#C0C0C0]/30 mb-4" />
                 <h3 className="font-bold text-white text-lg mb-2">{item.title}</h3>
                 <p className="text-[#B5B5B5] text-sm leading-relaxed">{item.desc}</p>
@@ -313,7 +344,7 @@ export default function Landing() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-28 relative overflow-hidden bg-[#E10600]">
+      <section className="py-28 relative overflow-hidden bg-[#E30613]">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=70&auto=format" alt="" loading="lazy" decoding="async" className="w-full h-full object-cover opacity-10" />
         </div>
@@ -347,8 +378,8 @@ export default function Landing() {
       <section className="py-16 bg-[#0B0B0B]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-8 h-px bg-[#E10600]" />
-            <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">Anfahrt</span>
+            <div className="w-8 h-px bg-[#E30613]" />
+            <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">Anfahrt</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>

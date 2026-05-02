@@ -35,8 +35,8 @@ export default function GallerySection({ showAll = false }) {
       <div className="max-w-7xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-px bg-[#E10600]" />
-            <span className="text-[#E10600] text-sm font-mono tracking-[0.2em] uppercase">Unsere Arbeit</span>
+            <div className="w-8 h-px bg-[#E30613]" />
+            <span className="text-[#E30613] text-sm font-mono tracking-[0.2em] uppercase">Unsere Arbeit</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">Vorher &amp; Nachher</h2>
           <p className="text-[#B5B5B5] mt-3 max-w-xl">Schieben Sie den Regler und sehen Sie den Unterschied. Professionelle Ergebnisse, die für sich sprechen.</p>
@@ -53,7 +53,7 @@ export default function GallerySection({ showAll = false }) {
 
         {!showAll && (
           <div className="mt-10 text-center">
-            <Link to="/galerie" className="inline-flex items-center gap-2 border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-[#E10600] hover:text-white px-8 py-3 text-sm font-medium transition-all">
+            <Link to="/galerie" className="inline-flex items-center gap-2 border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-[#E30613] hover:text-white px-8 py-3 text-sm font-medium transition-all">
               Alle Projekte ansehen <ArrowRight className="w-4 h-4"/>
             </Link>
           </div>

@@ -66,7 +66,11 @@ export default function BookingFlow() {
         setEmail(me.email || "");
       }
     });
-    base44.entities.Service.list().then(setServices);
+    base44.entities.Service.list("tier").then(all => {
+      // Falls die Backend-Records noch keinen is_active-Schalter haben (Legacy),
+      // sind sie standardmäßig sichtbar.
+      setServices(all.filter(s => s.is_active !== false));
+    });
   }, []);
 
   useEffect(() => {

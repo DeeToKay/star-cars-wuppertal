@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { Plus, Trash2, Loader2, AlertTriangle, Save, EyeOff, Eye, ArrowLeft, Upload } from "lucide-react";
@@ -22,6 +22,7 @@ const EMPTY_ITEM = {
 
 function FeatureList({ features, onChange }) {
   const [draft, setDraft] = useState("");
+  const id = useId();
   const add = () => {
     if (!draft.trim()) return;
     onChange([...(features || []), draft.trim()]);
@@ -29,10 +30,10 @@ function FeatureList({ features, onChange }) {
   };
   return (
     <div>
-      <label className="block text-xs text-[#C9C9D1] mb-1">Enthaltene Leistungen</label>
+      <label htmlFor={id} className="block text-xs text-[#C9C9D1] mb-1">Enthaltene Leistungen</label>
       <ul className="space-y-1.5 mb-2">
         {(features || []).map((f, i) => (
-          <li key={i} className="flex items-center gap-2 bg-[#0A0A0B] border border-white/10 px-3 py-1.5">
+          <li key={`${i}-${f}`} className="flex items-center gap-2 bg-[#0A0A0B] border border-white/10 px-3 py-1.5">
             <span className="flex-1 text-xs text-white">{f}</span>
             <button
               type="button"
@@ -47,6 +48,7 @@ function FeatureList({ features, onChange }) {
       </ul>
       <div className="flex gap-2">
         <input
+          id={id}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
@@ -67,6 +69,8 @@ function FeatureList({ features, onChange }) {
 
 function ServiceForm({ value, onChange, onSave, onCancel, saving }) {
   const update = (field, v) => onChange({ ...value, [field]: v });
+  const ids = useId();
+  const fid = (suffix) => `${ids}-${suffix}`;
 
   const handleImageUpload = async (file) => {
     if (!file) return;
@@ -78,48 +82,48 @@ function ServiceForm({ value, onChange, onSave, onCancel, saving }) {
     <div className="bg-[#161618] border border-white/10 p-5 space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Name <span className="text-[#E30613]">*</span></label>
-          <input value={value.name} onChange={(e) => update("name", e.target.value)}
+          <label htmlFor={fid("name")} className="block text-xs text-[#C9C9D1] mb-1">Name <span className="text-[#E30613]">*</span></label>
+          <input id={fid("name")} value={value.name} onChange={(e) => update("name", e.target.value)}
             placeholder="z.B. DELUXE"
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613]" />
         </div>
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Untertitel / Claim</label>
-          <input value={value.tagline || ""} onChange={(e) => update("tagline", e.target.value)}
+          <label htmlFor={fid("tagline")} className="block text-xs text-[#C9C9D1] mb-1">Untertitel / Claim</label>
+          <input id={fid("tagline")} value={value.tagline || ""} onChange={(e) => update("tagline", e.target.value)}
             placeholder="z.B. Wenn Pflege zur Leidenschaft wird"
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613]" />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs text-[#C9C9D1] mb-1">Beschreibung</label>
-        <textarea value={value.description || ""} onChange={(e) => update("description", e.target.value)}
+        <label htmlFor={fid("description")} className="block text-xs text-[#C9C9D1] mb-1">Beschreibung</label>
+        <textarea id={fid("description")} value={value.description || ""} onChange={(e) => update("description", e.target.value)}
           rows={2}
           className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 py-2 focus:outline-none focus:border-[#E30613]" />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Preis (€) <span className="text-[#E30613]">*</span></label>
-          <input type="number" min="0" step="1" value={value.price_eur}
+          <label htmlFor={fid("price")} className="block text-xs text-[#C9C9D1] mb-1">Preis (€) <span className="text-[#E30613]">*</span></label>
+          <input id={fid("price")} type="number" min="1" step="1" value={value.price_eur}
             onChange={(e) => update("price_eur", Number(e.target.value))}
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613] font-mono" />
         </div>
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Dauer (Min.) <span className="text-[#E30613]">*</span></label>
-          <input type="number" min="15" step="15" value={value.duration_minutes}
+          <label htmlFor={fid("duration")} className="block text-xs text-[#C9C9D1] mb-1">Dauer (Min.) <span className="text-[#E30613]">*</span></label>
+          <input id={fid("duration")} type="number" min="15" step="15" value={value.duration_minutes}
             onChange={(e) => update("duration_minutes", Number(e.target.value))}
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613] font-mono" />
         </div>
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Dauer-Anzeige</label>
-          <input value={value.duration_label || ""} onChange={(e) => update("duration_label", e.target.value)}
+          <label htmlFor={fid("duration_label")} className="block text-xs text-[#C9C9D1] mb-1">Dauer-Anzeige</label>
+          <input id={fid("duration_label")} value={value.duration_label || ""} onChange={(e) => update("duration_label", e.target.value)}
             placeholder="ca. 4–5 Std."
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613]" />
         </div>
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Reihenfolge</label>
-          <input type="number" min="0" step="1" value={value.tier || 0}
+          <label htmlFor={fid("tier")} className="block text-xs text-[#C9C9D1] mb-1">Reihenfolge</label>
+          <input id={fid("tier")} type="number" min="0" step="1" value={value.tier || 0}
             onChange={(e) => update("tier", Number(e.target.value))}
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613] font-mono" />
         </div>
@@ -127,22 +131,26 @@ function ServiceForm({ value, onChange, onSave, onCancel, saving }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Badge (optional)</label>
-          <input value={value.badge || ""} onChange={(e) => update("badge", e.target.value)}
+          <label htmlFor={fid("badge")} className="block text-xs text-[#C9C9D1] mb-1">Badge (optional)</label>
+          <input id={fid("badge")} value={value.badge || ""} onChange={(e) => update("badge", e.target.value)}
             placeholder="z.B. Bestseller"
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-sm px-3 h-9 focus:outline-none focus:border-[#E30613]" />
         </div>
         <div>
-          <label className="block text-xs text-[#C9C9D1] mb-1">Bild-URL</label>
+          <label htmlFor={fid("image")} className="block text-xs text-[#C9C9D1] mb-1">Bild-URL</label>
           <div className="flex gap-2">
-            <input value={value.image_url || ""} onChange={(e) => update("image_url", e.target.value)}
+            <input id={fid("image")} value={value.image_url || ""} onChange={(e) => update("image_url", e.target.value)}
               placeholder="https://… oder hochladen →"
               className="flex-1 border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]" />
             <label className="cursor-pointer flex items-center gap-1 border border-white/20 hover:border-[#E30613] text-xs text-[#C9C9D1] hover:text-white px-3 h-9 transition-colors shrink-0">
               <Upload className="w-3 h-3" />
+              <span className="sr-only">Bild hochladen</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e.target.files[0])} />
             </label>
           </div>
+          {value.image_url && (
+            <img src={value.image_url} alt={`Vorschau ${value.name || "Paket"}`} className="mt-2 h-20 w-full object-cover border border-white/10" />
+          )}
         </div>
       </div>
 

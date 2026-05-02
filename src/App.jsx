@@ -25,7 +25,7 @@ const AGB = lazy(() => import('./pages/AGB'));
 
 const RouteSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-[#0A0A0B]">
-    <div className="w-8 h-8 border-4 border-white/20 border-t-[#E10600] rounded-full animate-spin"></div>
+    <div className="w-8 h-8 border-4 border-white/20 border-t-[#E30613] rounded-full animate-spin"></div>
   </div>
 );
 

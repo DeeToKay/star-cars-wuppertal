@@ -46,7 +46,7 @@ export default function BeforeAfterSlider({ before, after, label }) {
 
       {/* Labels */}
       <div className="absolute top-3 left-3 bg-black/60 text-white text-xs font-bold px-2 py-1 font-mono uppercase tracking-wider">Vorher</div>
-      <div className="absolute top-3 right-3 bg-[#E10600]/80 text-white text-xs font-bold px-2 py-1 font-mono uppercase tracking-wider">Nachher</div>
+      <div className="absolute top-3 right-3 bg-[#E30613]/80 text-white text-xs font-bold px-2 py-1 font-mono uppercase tracking-wider">Nachher</div>
 
       {/* Service label */}
       {label && (

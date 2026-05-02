@@ -6,11 +6,11 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect x="80" y="120" width="14" height="120" fill="#E10600"/>
+  <rect x="80" y="120" width="14" height="120" fill="#E30613"/>
   <text x="120" y="220" font-family="Arial Black, Helvetica, sans-serif" font-weight="900" font-size="120" fill="#FFFFFF" letter-spacing="-3">STAR CARS</text>
-  <rect x="120" y="245" width="540" height="6" fill="#E10600"/>
+  <rect x="120" y="245" width="540" height="6" fill="#E30613"/>
   <text x="120" y="295" font-family="Courier New, monospace" font-weight="700" font-size="22" fill="#C0C0C0" letter-spacing="6">AUTOAUFBEREITUNG &amp; SMART REPAIR</text>
   <text x="120" y="430" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="44" fill="#FFFFFF">Premium Detailing in Wuppertal</text>
   <text x="120" y="490" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="28" fill="#A1A1AA">Festpreis · Fester Termin · Online buchen</text>
-  <text x="120" y="560" font-family="Courier New, monospace" font-weight="700" font-size="22" fill="#E10600" letter-spacing="3">RONSDORFER STR. 57 · 42119 WUPPERTAL</text>
+  <text x="120" y="560" font-family="Courier New, monospace" font-weight="700" font-size="22" fill="#E30613" letter-spacing="3">RONSDORFER STR. 57 · 42119 WUPPERTAL</text>
 </svg>

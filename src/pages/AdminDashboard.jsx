@@ -207,12 +207,12 @@ export default function AdminDashboard() {
           {/* Logo Upload */}
           <div className="mb-8 p-5 bg-[#161618] border border-white/10">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-3 h-px bg-[#E10600]" />
-              <span className="text-xs font-mono text-[#E10600] uppercase tracking-widest">Logo-Einstellung</span>
+              <div className="w-3 h-px bg-[#E30613]" />
+              <span className="text-xs font-mono text-[#E30613] uppercase tracking-widest">Logo-Einstellung</span>
             </div>
             <div className="flex items-center gap-5 flex-wrap">
               {logoUrl && <img src={logoUrl} alt="Logo" className="h-12 object-contain border border-white/10 p-1" />}
-              <label className="flex items-center gap-2 cursor-pointer border border-white/20 hover:border-[#E10600] text-sm text-[#B5B5B5] hover:text-white px-4 py-2 transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer border border-white/20 hover:border-[#E30613] text-sm text-[#B5B5B5] hover:text-white px-4 py-2 transition-colors">
                 {logoUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {logoUploading ? "Wird hochgeladen..." : "Logo hochladen"}
                 <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} disabled={logoUploading} />
