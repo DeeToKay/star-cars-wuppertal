@@ -1,5 +1,10 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+const STORE_ADDRESS = 'Ronsdorfer Str. 57, 42119 Wuppertal';
+const STORE_PHONE = '01726871641';
+const STORE_EMAIL = 'info@starcarswuppertal.com';
+const STORE_HOURS = 'Mo–Sa 10:00–20:00 Uhr';
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -22,17 +27,24 @@ Deno.serve(async (req) => {
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: booking.user_email,
       from_name: 'Star Cars Wuppertal',
-      subject: 'Dein Auto ist fertig!',
+      subject: '🚗 Ihr Auto ist abholbereit!',
       body: `Hallo ${booking.user_name || 'Kunde'},
 
-Ihr Fahrzeug steht bei Star Cars Wuppertal zur Abholung bereit.
+Ihr Fahrzeug ist fertig und steht bei Star Cars Wuppertal zur Abholung bereit.
 
 📍 Star Cars Wuppertal
-Ronsdorferstr 57
-42349 Wuppertal
+${STORE_ADDRESS}
+(an der StarTankstelle)
+
+📞 ${STORE_PHONE}
+✉️  ${STORE_EMAIL}
+🕐 ${STORE_HOURS}
 
 Service: ${booking.service_name}
 Datum: ${booking.appointment_date}
+Preis: €${Number(booking.service_price).toFixed(2)}
+
+Die Zahlung erfolgt vor Ort – bar oder per EC-/Kreditkarte.
 
 Wir freuen uns auf Ihren Besuch!
 
@@ -43,7 +55,7 @@ Ihr Star Cars Wuppertal Team`,
     console.log(`Ready email sent to ${booking.user_email}`);
     return Response.json({ success: true });
   } catch (error) {
-    console.error('Email error:', error.message);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Email error:', (error as Error).message);
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 });

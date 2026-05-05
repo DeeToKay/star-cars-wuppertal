@@ -4,13 +4,16 @@ import { base44 } from "@/api/base44Client";
 import { Plus, Trash2, Eye, EyeOff, Upload, Loader2, AlertTriangle, GripVertical, Save } from "lucide-react";
 import Navbar from "../components/Navbar";
 
+// Beispiel-Galerie: Vorher- und Nachher-Bild zeigen dasselbe Foto – das
+// Vorher-Bild ist entsättigt und abgedunkelt (Imgix-Parameter), damit der
+// Slider visuell stimmig wirkt, bis der Inhaber echte Aufnahmen hochlädt.
+const demoBefore = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85&sat=-100&exp=-20&blur=4`;
+const demoAfter  = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85`;
 const INITIAL_ITEMS = [
-  { title: "Premium Detailing – Mercedes S-Klasse", service_type: "Premium Detailing", before_image_url: "https://images.unsplash.com/photo-1590362891991-f776e747a588?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=85", sort_order: 0, is_published: true },
-  { title: "Smart Repair – BMW M3 Stoßstange", service_type: "Smart Repair", before_image_url: "https://images.unsplash.com/photo-1517524285303-d6fc683dddf8?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=85", sort_order: 1, is_published: true },
-  { title: "VIP Komplettpaket – Porsche 911", service_type: "VIP Komplettpaket", before_image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1612544409025-a69b7a36e3b3?w=1200&q=85", sort_order: 2, is_published: true },
-  { title: "Premium Detailing – Audi RS6", service_type: "Premium Detailing", before_image_url: "https://images.unsplash.com/photo-1541348263662-e068662d82af?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=1200&q=85", sort_order: 3, is_published: true },
-  { title: "Smart Repair – Range Rover", service_type: "Smart Repair", before_image_url: "https://images.unsplash.com/photo-1464219551459-ac14ae01fbe0?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1200&q=85", sort_order: 4, is_published: true },
-  { title: "VIP Komplettpaket – Lamborghini", service_type: "VIP Komplettpaket", before_image_url: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=85", after_image_url: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=85", sort_order: 5, is_published: true },
+  { title: "BASIC – Außen- & Innenpflege",   service_type: "BASIC",     before_image_url: demoBefore("1607860108855-64acf2078ed9"), after_image_url: demoAfter("1607860108855-64acf2078ed9"), sort_order: 0, is_published: true },
+  { title: "STANDARD – Glanzfinish",         service_type: "STANDARD",  before_image_url: demoBefore("1619642751034-765dfdf7c58e"), after_image_url: demoAfter("1619642751034-765dfdf7c58e"), sort_order: 1, is_published: true },
+  { title: "DELUXE – Tiefenglanz",           service_type: "DELUXE",    before_image_url: demoBefore("1503376780353-7e6692767b70"), after_image_url: demoAfter("1503376780353-7e6692767b70"), sort_order: 2, is_published: true },
+  { title: "EXCLUSIVE – Showroom-Finish",    service_type: "EXCLUSIVE", before_image_url: demoBefore("1563720360172-67b8f3dce741"), after_image_url: demoAfter("1563720360172-67b8f3dce741"), sort_order: 3, is_published: true },
 ];
 
 function ImageUpload({ label, value, onChange }) {
@@ -26,14 +29,14 @@ function ImageUpload({ label, value, onChange }) {
 
   return (
     <div>
-      <label className="block text-xs text-[#A1A1AA] mb-1">{label}</label>
+      <label className="block text-xs text-[#C9C9D1] mb-1">{label}</label>
       <div className="flex gap-2 items-start">
         <div className="flex-1">
           <input type="text" value={value || ""} onChange={e => onChange(e.target.value)}
             placeholder="https://… oder hochladen →"
             className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613] transition-colors"/>
         </div>
-        <label className="cursor-pointer flex items-center gap-1 border border-white/20 hover:border-[#E30613] text-xs text-[#A1A1AA] hover:text-white px-3 h-9 transition-colors shrink-0">
+        <label className="cursor-pointer flex items-center gap-1 border border-white/20 hover:border-[#E30613] text-xs text-[#C9C9D1] hover:text-white px-3 h-9 transition-colors shrink-0">
           {uploading ? <Loader2 className="w-3 h-3 animate-spin"/> : <Upload className="w-3 h-3"/>}
           <input type="file" accept="image/*" className="hidden" onChange={e => handleFile(e.target.files[0])} disabled={uploading}/>
         </label>
@@ -158,22 +161,22 @@ export default function AdminGallery() {
             <h3 className="text-sm font-bold text-white">Neues Vorher/Nachher-Paar</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-[#A1A1AA] mb-1">Titel <span className="text-[#E30613]">*</span></label>
+                <label className="block text-xs text-[#C9C9D1] mb-1">Titel <span className="text-[#E30613]">*</span></label>
                 <input value={newItem.title} onChange={e => setNewItem(p => ({ ...p, title: e.target.value }))}
-                  placeholder="z.B. Premium Detailing – BMW 5er"
+                  placeholder="z.B. DELUXE – BMW 5er"
                   className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]"/>
               </div>
               <div>
-                <label className="block text-xs text-[#A1A1AA] mb-1">Service-Kategorie</label>
+                <label className="block text-xs text-[#C9C9D1] mb-1">Service-Kategorie</label>
                 <input value={newItem.service_type} onChange={e => setNewItem(p => ({ ...p, service_type: e.target.value }))}
-                  placeholder="Express-Reinigung"
+                  placeholder="BASIC, STANDARD, DELUXE oder EXCLUSIVE"
                   className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]"/>
               </div>
             </div>
             <ImageUpload label="Vorher-Bild *" value={newItem.before_image_url} onChange={v => setNewItem(p => ({ ...p, before_image_url: v }))}/>
             <ImageUpload label="Nachher-Bild *" value={newItem.after_image_url} onChange={v => setNewItem(p => ({ ...p, after_image_url: v }))}/>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setShowNew(false)} className="text-[#A1A1AA] text-sm hover:text-white px-4 py-2">Abbrechen</button>
+              <button onClick={() => setShowNew(false)} className="text-[#C9C9D1] text-sm hover:text-white px-4 py-2">Abbrechen</button>
               <button onClick={createItem} disabled={creating || !newItem.title || !newItem.before_image_url || !newItem.after_image_url}
                 className="flex items-center gap-2 bg-[#E30613] disabled:opacity-40 text-white text-sm font-bold px-6 py-2 hover:bg-[#c0000f] transition-colors">
                 {creating ? <Loader2 className="w-4 h-4 animate-spin"/> : <Save className="w-4 h-4"/>} Speichern
@@ -183,7 +186,7 @@ export default function AdminGallery() {
         )}
 
         {items.length === 0 ? (
-          <div className="py-20 text-center text-[#A1A1AA] bg-[#161618] border border-white/10">
+          <div className="py-20 text-center text-[#C9C9D1] bg-[#161618] border border-white/10">
             <p className="mb-3">Noch keine Galerie-Einträge.</p>
             <p className="text-xs">Klicken Sie "Beispielbilder importieren" oder fügen Sie manuell Bilder hinzu.</p>
           </div>
@@ -194,18 +197,18 @@ export default function AdminGallery() {
                 className="bg-[#161618] border border-white/10 p-4">
                 <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-4 items-start">
                   {/* Drag handle placeholder */}
-                  <GripVertical className="w-4 h-4 text-[#A1A1AA] mt-2 hidden lg:block cursor-grab"/>
+                  <GripVertical className="w-4 h-4 text-[#C9C9D1] mt-2 hidden lg:block cursor-grab"/>
 
                   {/* Content */}
                   <div className="space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs text-[#A1A1AA] mb-1">Titel</label>
+                        <label className="block text-xs text-[#C9C9D1] mb-1">Titel</label>
                         <input value={item.title} onChange={e => updateField(item.id, "title", e.target.value)}
                           className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]"/>
                       </div>
                       <div>
-                        <label className="block text-xs text-[#A1A1AA] mb-1">Service-Kategorie</label>
+                        <label className="block text-xs text-[#C9C9D1] mb-1">Service-Kategorie</label>
                         <input value={item.service_type || ""} onChange={e => updateField(item.id, "service_type", e.target.value)}
                           className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]"/>
                       </div>
@@ -223,14 +226,14 @@ export default function AdminGallery() {
                       {saving === item.id ? <Loader2 className="w-3 h-3 animate-spin"/> : <Save className="w-3 h-3"/>} Speichern
                     </button>
                     <button onClick={() => togglePublish(item)} disabled={saving === item.id}
-                      className="flex items-center gap-1 border border-white/20 text-xs px-3 py-1.5 hover:border-white transition-colors text-[#A1A1AA]">
+                      className="flex items-center gap-1 border border-white/20 text-xs px-3 py-1.5 hover:border-white transition-colors text-[#C9C9D1]">
                       {item.is_published ? <><EyeOff className="w-3 h-3"/> Ausblenden</> : <><Eye className="w-3 h-3"/> Anzeigen</>}
                     </button>
                     <button onClick={() => deleteItem(item.id)} disabled={saving === item.id}
                       className="flex items-center gap-1 border border-red-500/30 text-red-400 text-xs px-3 py-1.5 hover:border-red-400 transition-colors">
                       <Trash2 className="w-3 h-3"/> Löschen
                     </button>
-                    <span className={`text-xs px-2 py-1 font-mono ${item.is_published ? "text-green-400 bg-green-400/10" : "text-[#A1A1AA] bg-white/5"}`}>
+                    <span className={`text-xs px-2 py-1 font-mono ${item.is_published ? "text-green-400 bg-green-400/10" : "text-[#C9C9D1] bg-white/5"}`}>
                       {item.is_published ? "● Aktiv" : "○ Versteckt"}
                     </span>
                   </div>

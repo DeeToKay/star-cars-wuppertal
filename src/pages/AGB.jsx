@@ -11,44 +11,31 @@ export default function AGB() {
           <span className="text-[#E30613] text-xs font-mono tracking-widest uppercase">Rechtliches</span>
         </div>
         <h1 className="text-4xl font-black mb-2">Allgemeine Geschäftsbedingungen</h1>
-        <p className="text-[#A1A1AA] mb-10 text-sm">Stand: April 2026</p>
+        <p className="text-[#C9C9D1] mb-10 text-sm">Stand: April 2026</p>
 
-        <div className="text-[#A1A1AA] space-y-8 leading-relaxed text-sm">
+        <div className="text-[#C9C9D1] space-y-8 leading-relaxed text-sm">
           <section>
             <h2 className="text-white font-bold text-base mb-3">§ 1 Geltungsbereich</h2>
-            <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge zwischen Kilic Savas (Einzelunternehmen), Star Cars, Ronsdorferstr. 57, 42283 Wuppertal (nachfolgend „Anbieter") und dem Kunden (nachfolgend „Auftraggeber") über die Erbringung von Fahrzeugaufbereitungs- und Smart-Repair-Dienstleistungen.</p>
+            <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge zwischen Kilic Savas (Einzelunternehmen), Star Cars, Ronsdorfer Str. 57, 42119 Wuppertal (nachfolgend „Anbieter") und dem Kunden (nachfolgend „Auftraggeber") über die Erbringung von Fahrzeugaufbereitungs- und Smart-Repair-Dienstleistungen.</p>
           </section>
 
           <section>
             <h2 className="text-white font-bold text-base mb-3">§ 2 Vertragsschluss & Buchung</h2>
-            <p>Die Buchung erfolgt online über die Website. Mit Auswahl des Services, des Termins und Absenden des Buchungsformulars gibt der Auftraggeber eine verbindliche Reservierungsanfrage ab. Der Vertrag kommt mit der Buchungsbestätigung per E-Mail zustande. Eine Vorkasse ist nicht erforderlich.</p>
+            <p>Die Buchung erfolgt online über die Website. Mit Auswahl des Services, des Termins und Absenden des Buchungsformulars gibt der Auftraggeber eine Reservierungsanfrage ab. Der Vertrag kommt mit der Buchungsbestätigung per E-Mail zustande. Eine Vorkasse oder Reservierungsgebühr wird nicht erhoben.</p>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 3 Zahlung</h2>
-            <p>Die Buchung ist eine verbindliche Reservierung. Die Zahlung erfolgt ausschließlich vor Ort bei Abholung des Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Es wird keine Vorkasse erhoben. Alle Preise sind Endpreise in Euro (€) inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar).</p>
+            <h2 className="text-white font-bold text-base mb-3">§ 3 Preise & Zahlung</h2>
+            <p>Es gelten die zum Zeitpunkt der Buchung auf der Website angegebenen Festpreise der Pakete <strong className="text-white">BASIC (79 €)</strong>, <strong className="text-white">STANDARD (159 €)</strong>, <strong className="text-white">DELUXE (269 €)</strong> und <strong className="text-white">EXCLUSIVE (999 €)</strong>. Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer (soweit anwendbar).</p>
+            <p className="mt-3">Zusätzliche Politurgänge, die über den Leistungsumfang des gebuchten Pakets hinausgehen, werden mit jeweils <strong className="text-white">89,00 €</strong> berechnet und vor Ausführung mit dem Auftraggeber abgestimmt.</p>
+            <p className="mt-3">Die Zahlung erfolgt ausschließlich vor Ort bei Abholung des Fahrzeugs – wahlweise bar oder per EC-/Kreditkarte. Eine Vorkasse oder Reservierungsgebühr wird nicht erhoben.</p>
           </section>
 
           <section>
-            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung & No-Show</h2>
-            <div className="space-y-3">
-              <p>Stornierungen sind kostenlos bis <strong className="text-white">24 Stunden vor dem vereinbarten Termin</strong> per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> oder telefonisch unter <a href="tel:01726871641" className="text-[#E30613]">01726871641</a> möglich. Maßgeblich ist der Eingang der Stornierung beim Anbieter.</p>
-              <div className="border border-white/10 overflow-hidden mt-3">
-                <div className="grid grid-cols-2 border-b border-white/10">
-                  <div className="px-4 py-3 bg-white/5 font-medium text-white text-xs uppercase tracking-wider">Stornierungszeitpunkt</div>
-                  <div className="px-4 py-3 bg-white/5 font-medium text-white text-xs uppercase tracking-wider">Konsequenz</div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white/10">
-                  <div className="px-4 py-3">Mehr als 24 h vor Termin</div>
-                  <div className="px-4 py-3 text-green-400 font-bold">Kostenlos</div>
-                </div>
-                <div className="grid grid-cols-2">
-                  <div className="px-4 py-3">Weniger als 24 h vor Termin oder No-Show</div>
-                  <div className="px-4 py-3 text-[#E30613] font-bold">Bearbeitungspauschale 20 % des Servicepreises</div>
-                </div>
-              </div>
-              <p className="mt-2">Bei Nichterscheinen (No-Show) oder Stornierung weniger als 24 Stunden vor dem vereinbarten Termin behält sich der Anbieter vor, eine Bearbeitungspauschale in Höhe von 20 % des gebuchten Servicepreises als Schadensersatz für die entgangene Belegung zu berechnen. Die Geltendmachung erfolgt per Rechnung per E-Mail.</p>
-            </div>
+            <h2 className="text-white font-bold text-base mb-3">§ 4 Stornierung & Terminänderung</h2>
+            <p>Stornierungen und Terminverschiebungen sind <strong className="text-white">jederzeit kostenfrei</strong> möglich. Es entstehen weder Stornogebühren noch sonstige Kosten – auch nicht bei kurzfristiger Absage oder Nichterscheinen.</p>
+            <p className="mt-3">Eine Stornierung oder Umbuchung kann per E-Mail an <a href="mailto:info@starcarswuppertal.com" className="text-[#E30613]">info@starcarswuppertal.com</a> oder telefonisch unter <a href="tel:01726871641" className="text-[#E30613]">01726871641</a> erfolgen. Im Sinne einer fairen Terminplanung bitten wir um eine möglichst rechtzeitige Mitteilung, damit der Termin neu vergeben werden kann.</p>
+            <p className="mt-3">Bereits begonnene oder vollständig erbrachte Leistungen können nicht mehr storniert werden (siehe § 5).</p>
           </section>
 
           <section>
@@ -58,7 +45,7 @@ export default function AGB() {
 
           <section>
             <h2 className="text-white font-bold text-base mb-3">§ 6 Pflichten des Auftraggebers</h2>
-            <p>Der Auftraggeber ist verpflichtet, das Fahrzeug zum vereinbarten Termin an der Betriebsstätte (Ronsdorferstr. 57, 42283 Wuppertal, an der StarTankstelle) zu übergeben. Fahrzeuge sollen zugänglich und frei von gefährlichen Materialien sein.</p>
+            <p>Der Auftraggeber ist verpflichtet, das Fahrzeug zum vereinbarten Termin an der Betriebsstätte (Ronsdorfer Str. 57, 42119 Wuppertal, an der StarTankstelle) zu übergeben. Fahrzeuge sollen zugänglich und frei von gefährlichen Materialien sein.</p>
           </section>
 
           <section>

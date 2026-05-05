@@ -17,6 +17,7 @@ export default function LogoMark({ height = 56, footer = false }) {
         src={logoUrl}
         alt="Star Cars Wuppertal"
         style={{ height: `${height}px`, width: "auto" }}
+        decoding="async"
         className="object-contain"
       />
     );
@@ -27,10 +28,10 @@ export default function LogoMark({ height = 56, footer = false }) {
     return (
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-8 bg-[#E10600]" />
+          <div className="w-1 h-8 bg-[#E30613]" />
           <span className="font-black text-white text-xl tracking-tight leading-none">STAR CARS</span>
         </div>
-        <div className="border-b-2 border-[#E10600] mt-1 mb-1" />
+        <div className="border-b-2 border-[#E30613] mt-1 mb-1" />
         <span className="text-[#C0C0C0] text-[10px] font-mono tracking-widest uppercase ml-3">
           Autoaufbereitung &amp; Smart Repair
         </span>
@@ -40,10 +41,10 @@ export default function LogoMark({ height = 56, footer = false }) {
 
   return (
     <div className="flex items-center gap-3">
-      <div className="w-1 h-10 bg-[#E10600]" />
+      <div className="w-1 h-10 bg-[#E30613]" />
       <div>
         <div className="font-black text-white text-xl tracking-tight leading-none">STAR CARS</div>
-        <div className="border-b border-[#E10600] mb-0.5" />
+        <div className="border-b border-[#E30613] mb-0.5" />
         <div className="text-[#C0C0C0] text-[9px] font-mono tracking-widest uppercase">
           AUTOAUFBEREITUNG &amp; SMART REPAIR
         </div>

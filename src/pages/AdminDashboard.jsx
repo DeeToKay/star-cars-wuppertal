@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List, Upload } from "lucide-react";
 import Navbar from "../components/Navbar";
-import AdminFilters, { STATUS_CONFIG, STATUSES } from "../components/admin/AdminFilters";
+import AdminFilters, { STATUSES } from "../components/admin/AdminFilters";
 import BookingTable from "../components/admin/BookingTable";
 
 function exportCSV(bookings) {
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
       <div className="text-center">
         <AlertTriangle className="w-16 h-16 text-[#E30613] mx-auto mb-4" />
         <h2 className="text-2xl font-black text-white mb-2">Zugriff verweigert</h2>
-        <p className="text-[#A1A1AA]">Sie benötigen Admin-Rechte für diesen Bereich.</p>
+        <p className="text-[#C9C9D1]">Sie benötigen Admin-Rechte für diesen Bereich.</p>
       </div>
     </div>
   );
@@ -149,6 +149,9 @@ export default function AdminDashboard() {
               <h1 className="text-4xl font-black tracking-tight">Admin Dashboard</h1>
             </div>
             <div className="flex gap-3">
+              <a href="/admin/services" className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors">
+                📦 Pakete
+              </a>
               <a href="/admin/gallery" className="flex items-center gap-2 border border-white/20 text-white text-sm font-medium px-4 py-2 hover:border-[#E30613] hover:text-[#E30613] transition-colors">
                 🖼 Galerie
               </a>
@@ -172,10 +175,10 @@ export default function AdminDashboard() {
               <div key={s.label} className="bg-[#161618] border border-white/10 p-5">
                 <div className="flex items-center justify-between mb-3">
                   <s.icon className="w-5 h-5 text-[#E30613]" />
-                  <span className="text-[#A1A1AA] text-xs">{s.label}</span>
+                  <span className="text-[#C9C9D1] text-xs">{s.label}</span>
                 </div>
                 <div className="font-mono font-bold text-2xl text-white">{s.value}</div>
-                <div className="text-[#A1A1AA] text-xs mt-1">{s.sub}</div>
+                <div className="text-[#C9C9D1] text-xs mt-1">{s.sub}</div>
               </div>
             ))}
           </div>
@@ -192,10 +195,10 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="flex border border-white/10 overflow-hidden shrink-0">
-              <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#A1A1AA] hover:text-white"}`}>
+              <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <List className="w-4 h-4" />
               </button>
-              <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#A1A1AA] hover:text-white"}`}>
+              <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
@@ -204,12 +207,12 @@ export default function AdminDashboard() {
           {/* Logo Upload */}
           <div className="mb-8 p-5 bg-[#161618] border border-white/10">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-3 h-px bg-[#E10600]" />
-              <span className="text-xs font-mono text-[#E10600] uppercase tracking-widest">Logo-Einstellung</span>
+              <div className="w-3 h-px bg-[#E30613]" />
+              <span className="text-xs font-mono text-[#E30613] uppercase tracking-widest">Logo-Einstellung</span>
             </div>
             <div className="flex items-center gap-5 flex-wrap">
               {logoUrl && <img src={logoUrl} alt="Logo" className="h-12 object-contain border border-white/10 p-1" />}
-              <label className="flex items-center gap-2 cursor-pointer border border-white/20 hover:border-[#E10600] text-sm text-[#B5B5B5] hover:text-white px-4 py-2 transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer border border-white/20 hover:border-[#E30613] text-sm text-[#B5B5B5] hover:text-white px-4 py-2 transition-colors">
                 {logoUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {logoUploading ? "Wird hochgeladen..." : "Logo hochladen"}
                 <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} disabled={logoUploading} />
@@ -218,7 +221,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="text-[#A1A1AA] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
+          <div className="text-[#C9C9D1] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
 
           <BookingTable
             bookings={filtered}

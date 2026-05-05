@@ -35,7 +35,7 @@ function StatusDropdown({ current, loading, onChange }) {
 
 export default function BookingTable({ bookings, updating, flashGreen, onStatusChange, viewMode }) {
   if (bookings.length === 0) {
-    return <div className="p-12 text-center text-[#A1A1AA] bg-[#161618] border border-white/10">Keine Buchungen gefunden.</div>;
+    return <div className="p-12 text-center text-[#C9C9D1] bg-[#161618] border border-white/10">Keine Buchungen gefunden.</div>;
   }
 
   if (viewMode === "bay") {
@@ -52,7 +52,7 @@ export default function BookingTable({ bookings, updating, flashGreen, onStatusC
                 {slotBookings.map(b => (
                   <div key={b.id} className={`border p-3 transition-all ${flashGreen === b.id ? "border-green-500 bg-green-500/10" : "border-white/10"}`}>
                     <div className="font-medium text-white text-sm">{b.user_name || "—"}</div>
-                    <div className="text-[#A1A1AA] text-xs">{b.service_name}</div>
+                    <div className="text-[#C9C9D1] text-xs">{b.service_name}</div>
                     <div className="mt-2">
                       <StatusDropdown current={b.status} loading={updating === b.id} onChange={(s) => onStatusChange(b.id, s)} />
                     </div>
@@ -68,7 +68,7 @@ export default function BookingTable({ bookings, updating, flashGreen, onStatusC
 
   return (
     <div className="bg-[#161618] border border-white/10 overflow-hidden">
-      <div className="hidden lg:grid grid-cols-8 gap-2 px-5 py-3 border-b border-white/10 text-xs font-mono text-[#A1A1AA] uppercase tracking-widest">
+      <div className="hidden lg:grid grid-cols-8 gap-2 px-5 py-3 border-b border-white/10 text-xs font-mono text-[#C9C9D1] uppercase tracking-widest">
         <div>Datum</div>
         <div>Zeit</div>
         <div>Kunde</div>
@@ -85,10 +85,10 @@ export default function BookingTable({ bookings, updating, flashGreen, onStatusC
           className={`grid grid-cols-1 lg:grid-cols-8 gap-2 px-5 py-4 border-b border-white/5 transition-all duration-500 ${flashGreen === b.id ? "bg-green-500/10" : "hover:bg-white/[0.02]"}`}
         >
           <div className="font-mono text-sm text-white">{b.appointment_date}</div>
-          <div className="font-mono text-sm text-[#A1A1AA]">{b.appointment_time}</div>
+          <div className="font-mono text-sm text-[#C9C9D1]">{b.appointment_time}</div>
           <div>
             <div className="text-sm text-white font-medium">{b.user_name || "—"}</div>
-            <div className="text-xs text-[#A1A1AA]">{b.phone_number || b.user_email || ""}</div>
+            <div className="text-xs text-[#C9C9D1]">{b.phone_number || b.user_email || ""}</div>
           </div>
           <div>
             <span className="font-mono text-xs text-[#C0C0C0] bg-white/5 px-2 py-1">{b.license_plate || "—"}</span>

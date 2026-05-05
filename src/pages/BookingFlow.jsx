@@ -5,6 +5,8 @@ import { base44 } from "@/api/base44Client";
 import { ArrowRight, ArrowLeft, Check, Clock, AlertCircle, Loader2, Car } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { validateContact } from "@/lib/booking-schema";
+import { ADDON_POLISH_NOTE } from "@/lib/services";
 
 const ALL_TIME_SLOTS = [
   "10:00","10:30","11:00","11:30","12:00","12:30",
@@ -24,13 +26,6 @@ function getAvailableSlots(durationMinutes) {
 
 function getDaysInMonth(year, month) { return new Date(year, month + 1, 0).getDate(); }
 function getFirstDayOfMonth(year, month) { return new Date(year, month, 1).getDay(); }
-
-function validatePhone(phone) {
-  return /^[\d\s\+\-\(\)]{7,20}$/.test(phone.trim());
-}
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
 
 const STEPS = ["Service", "Datum & Zeit", "Kontaktdaten", "Bestätigen"];
 const MAX_BAYS = 3;
@@ -59,6 +54,7 @@ export default function BookingFlow() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const honeypotRef = useRef(null);
 
   useEffect(() => {
@@ -70,7 +66,11 @@ export default function BookingFlow() {
         setEmail(me.email || "");
       }
     });
-    base44.entities.Service.list().then(setServices);
+    base44.entities.Service.list("tier").then(all => {
+      // Falls die Backend-Records noch keinen is_active-Schalter haben (Legacy),
+      // sind sie standardmäßig sichtbar.
+      setServices(all.filter(s => s.is_active !== false));
+    });
   }, []);
 
   useEffect(() => {
@@ -97,22 +97,22 @@ export default function BookingFlow() {
   const handleDateSelect = (day) => { if (isDayDisabled(day)) return; setSelectedDate(fmtDate(calYear, calMonth, day)); setSelectedTime(null); };
 
   const handleSubmit = async () => {
-    // Honeypot check
+    // Honeypot check (silent fail for bots)
     if (honeypotRef.current?.value) return;
 
-    if (!name.trim()) { setError("Bitte geben Sie Ihren Namen ein."); return; }
-    if (!validateEmail(email)) { setError("Bitte eine gültige E-Mail-Adresse eingeben."); return; }
-    if (!validatePhone(phone)) { setError("Bitte eine gültige Telefonnummer eingeben (z.B. +49 202 123456)."); return; }
-    if (!agbAccepted) { setError("Bitte akzeptieren Sie die AGB und Datenschutzerklärung."); return; }
+    const validation = validateContact({ name, email, phone, licensePlate, agbAccepted });
+    if (!validation.ok) {
+      setFieldErrors(validation.fieldErrors);
+      setError(validation.message || "Bitte prüfen Sie Ihre Eingaben.");
+      return;
+    }
 
     setSubmitting(true);
     setError("");
+    setFieldErrors({});
     try {
       const response = await base44.functions.invoke("createBooking", {
         service_id: selectedService.id,
-        service_name: selectedService.name,
-        service_price: selectedService.price_eur,
-        service_duration: selectedService.duration_minutes,
         appointment_date: selectedDate,
         appointment_time: selectedTime,
         phone_number: phone.trim(),
@@ -122,13 +122,15 @@ export default function BookingFlow() {
         license_plate: licensePlate.trim().toUpperCase(),
         agb_accepted: true,
       });
-      if (response.data?.success) {
+      const data = response?.data ?? response;
+      if (data?.success) {
         navigate("/booking-success");
       } else {
-        setError(response.data?.error || "Fehler beim Erstellen der Buchung.");
+        setError(data?.error || "Fehler beim Erstellen der Buchung. Bitte später erneut versuchen.");
       }
     } catch (e) {
-      setError(e.message || "Unbekannter Fehler. Bitte versuchen Sie es erneut.");
+      const apiMsg = e?.response?.data?.error || e?.data?.error;
+      setError(apiMsg || e?.message || "Unbekannter Fehler. Bitte versuchen Sie es erneut.");
     }
     setSubmitting(false);
   };
@@ -149,8 +151,8 @@ export default function BookingFlow() {
           <div className="flex items-center gap-0 flex-wrap gap-y-2">
             {STEPS.map((label, i) => (
               <div key={label} className="flex items-center">
-                <div className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all ${step===i+1?"text-white":step>i+1?"text-[#E30613]":"text-[#A1A1AA]"}`}>
-                  <div className={`w-6 h-6 flex items-center justify-center text-xs font-bold border transition-all ${step>i+1?"border-[#E30613] bg-[#E30613] text-white":step===i+1?"border-white text-white":"border-white/20 text-[#A1A1AA]"}`}>
+                <div className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all ${step===i+1?"text-white":step>i+1?"text-[#E30613]":"text-[#C9C9D1]"}`}>
+                  <div className={`w-6 h-6 flex items-center justify-center text-xs font-bold border transition-all ${step>i+1?"border-[#E30613] bg-[#E30613] text-white":step===i+1?"border-white text-white":"border-white/20 text-[#C9C9D1]"}`}>
                     {step>i+1?<Check className="w-3 h-3"/>:i+1}
                   </div>
                   <span className="hidden sm:block">{label}</span>
@@ -168,31 +170,53 @@ export default function BookingFlow() {
               {/* STEP 1: Service */}
               {step===1 && (
                 <motion.div key="s1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="text-2xl font-black mb-6">Service wählen</h2>
+                  <h2 className="text-2xl font-black mb-6">Paket wählen</h2>
                   {services.length===0 ? (
                     <div className="flex items-center justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#E30613]"/></div>
                   ) : (
                     <div className="grid gap-4">
-                      {services.map(s => (
-                        <button key={s.id} onClick={()=>setSelectedService(s)}
-                          className={`w-full text-left p-5 border transition-all min-h-[44px] ${selectedService?.id===s.id?"border-[#E30613] bg-[#E30613]/10":"border-white/10 bg-[#161618] hover:border-white/30"}`}>
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="font-bold text-white text-lg">{s.name}</div>
-                              <div className="text-[#A1A1AA] text-sm mt-1">{s.description}</div>
-                              <div className="flex items-center gap-1 text-[#A1A1AA] text-xs mt-2">
-                                <Clock className="w-3 h-3"/><span>{s.duration_minutes} Min.</span>
+                      {services.map(s => {
+                        const selected = selectedService?.id === s.id;
+                        const features = Array.isArray(s.features) ? s.features : [];
+                        const durationLabel = s.duration_label || `${s.duration_minutes} Min.`;
+                        return (
+                          <button key={s.id} onClick={()=>setSelectedService(s)}
+                            className={`w-full text-left p-5 border transition-all min-h-[44px] relative ${selected?"border-[#E30613] bg-[#E30613]/10":"border-white/10 bg-[#161618] hover:border-white/30"}`}>
+                            {s.badge && (
+                              <span className="absolute top-3 right-3 bg-[#E30613] text-white text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-0.5">
+                                {s.badge}
+                              </span>
+                            )}
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-bold text-white text-lg tracking-wide">{s.name}</div>
+                                {s.tagline && <div className="text-white/80 text-xs uppercase tracking-wide font-semibold mt-0.5">{s.tagline}</div>}
+                                <div className="text-[#C9C9D1] text-sm mt-2">{s.description}</div>
+                                {features.length > 0 && (
+                                  <ul className="mt-3 space-y-1.5">
+                                    {features.map((f) => (
+                                      <li key={f} className="flex items-start gap-2 text-[#C9C9D1] text-xs leading-relaxed">
+                                        <Check className="w-3 h-3 text-[#E30613] shrink-0 mt-0.5" />
+                                        <span>{f}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                                <div className="flex items-center gap-1 text-[#C9C9D1] text-xs mt-3">
+                                  <Clock className="w-3 h-3"/><span>{durationLabel}</span>
+                                </div>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <div className="font-mono font-bold text-[#E30613] text-2xl">{Number(s.price_eur).toFixed(0)} €</div>
+                                {selected && <Check className="w-5 h-5 text-[#E30613] ml-auto mt-2"/>}
                               </div>
                             </div>
-                            <div className="text-right ml-4 shrink-0">
-                              <div className="font-mono font-bold text-[#E30613] text-xl">€{Number(s.price_eur).toFixed(2)}</div>
-                              {selectedService?.id===s.id && <Check className="w-5 h-5 text-[#E30613] ml-auto mt-2"/>}
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
+                  <p className="mt-4 text-[#C9C9D1] text-[11px] font-mono uppercase tracking-widest">{ADDON_POLISH_NOTE}</p>
                   <div className="mt-6 flex justify-end">
                     <button disabled={!selectedService} onClick={()=>setStep(2)}
                       className="flex items-center gap-2 bg-[#E30613] disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-8 py-3 hover:bg-[#c0000f] transition-colors min-h-[48px]">
@@ -208,12 +232,12 @@ export default function BookingFlow() {
                   <h2 className="text-2xl font-black mb-6">Datum & Uhrzeit</h2>
                   <div className="bg-[#161618] border border-white/10 p-5 mb-5">
                     <div className="flex items-center justify-between mb-5">
-                      <button onClick={prevMonth} className="text-[#A1A1AA] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">‹</button>
+                      <button onClick={prevMonth} className="text-[#C9C9D1] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">‹</button>
                       <span className="font-bold text-white">{monthNames[calMonth]} {calYear}</span>
-                      <button onClick={nextMonth} className="text-[#A1A1AA] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">›</button>
+                      <button onClick={nextMonth} className="text-[#C9C9D1] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">›</button>
                     </div>
                     <div className="grid grid-cols-7 gap-1 mb-2">
-                      {dayNames.map(d => <div key={d} className="text-center text-[#A1A1AA] text-xs font-mono py-1">{d}</div>)}
+                      {dayNames.map(d => <div key={d} className="text-center text-[#C9C9D1] text-xs font-mono py-1">{d}</div>)}
                     </div>
                     <div className="grid grid-cols-7 gap-1">
                       {Array.from({length:adjustedFirstDay}).map((_,i)=><div key={`e${i}`}/>)}
@@ -231,7 +255,7 @@ export default function BookingFlow() {
 
                   {selectedDate && (
                     <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>
-                      <h3 className="text-xs font-bold text-[#A1A1AA] uppercase tracking-widest mb-3 font-mono">Verfügbare Zeiten</h3>
+                      <h3 className="text-xs font-bold text-[#C9C9D1] uppercase tracking-widest mb-3 font-mono">Verfügbare Zeiten</h3>
                       <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                         {getAvailableSlots(selectedService?.duration_minutes||60).map(t=>{
                           const count=slotCounts[t]||0, full=count>=MAX_BAYS;
@@ -243,7 +267,7 @@ export default function BookingFlow() {
                           );
                         })}
                       </div>
-                      <div className="flex items-center gap-4 mt-3 text-xs text-[#A1A1AA]">
+                      <div className="flex items-center gap-4 mt-3 text-xs text-[#C9C9D1]">
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/20 inline-block"/> Frei</span>
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-yellow-500/40 inline-block"/> Teilweise belegt</span>
                         <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white/5 opacity-30 inline-block"/> Ausgebucht</span>
@@ -252,7 +276,7 @@ export default function BookingFlow() {
                   )}
 
                   <div className="mt-6 flex justify-between">
-                    <button onClick={()=>setStep(1)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(1)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button disabled={!selectedDate||!selectedTime} onClick={()=>setStep(3)}
@@ -272,27 +296,42 @@ export default function BookingFlow() {
                     <input ref={honeypotRef} type="text" name="website" autoComplete="off" className="hidden" tabIndex={-1}/>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">Name <span className="text-[#E30613]">*</span></label>
-                      <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Mustermann"
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12"/>
+                      <label htmlFor="name" className="block text-sm font-medium text-[#C9C9D1] mb-2">Name <span className="text-[#E30613]">*</span></label>
+                      <input id="name" type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Mustermann"
+                        autoComplete="name"
+                        aria-invalid={!!fieldErrors.name}
+                        aria-describedby={fieldErrors.name ? "name-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${fieldErrors.name ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.name && <p id="name-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
-                      <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="max@beispiel.de"
+                      <label htmlFor="email" className="block text-sm font-medium text-[#C9C9D1] mb-2">E-Mail <span className="text-[#E30613]">*</span></label>
+                      <input id="email" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="max@beispiel.de"
+                        autoComplete="email" inputMode="email"
                         readOnly={!!user?.email}
-                        className={`w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12 ${user?.email?"opacity-60 cursor-not-allowed":""}`}/>
+                        aria-invalid={!!fieldErrors.email}
+                        aria-describedby={fieldErrors.email ? "email-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${user?.email?"opacity-60 cursor-not-allowed":""} ${fieldErrors.email ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.email && <p id="email-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
-                      <input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+49 202 123456"
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12"/>
+                      <label htmlFor="phone" className="block text-sm font-medium text-[#C9C9D1] mb-2">Telefon <span className="text-[#E30613]">*</span></label>
+                      <input id="phone" type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+49 202 123456"
+                        autoComplete="tel" inputMode="tel"
+                        aria-invalid={!!fieldErrors.phone}
+                        aria-describedby={fieldErrors.phone ? "phone-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 ${fieldErrors.phone ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.phone && <p id="phone-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.phone}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
-                        <Car className="w-3 h-3 inline mr-1"/>Kennzeichen <span className="text-[#A1A1AA] font-normal">(optional)</span>
+                      <label htmlFor="license" className="block text-sm font-medium text-[#C9C9D1] mb-2">
+                        <Car className="w-3 h-3 inline mr-1"/>Kennzeichen <span className="text-[#C9C9D1] font-normal">(optional)</span>
                       </label>
-                      <input type="text" value={licensePlate} onChange={e=>setLicensePlate(e.target.value.toUpperCase())} placeholder="WU AB 1234" maxLength={12}
-                        className="w-full border border-white/10 bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none focus:border-[#E30613] transition-colors h-12 font-mono"/>
+                      <input id="license" type="text" value={licensePlate} onChange={e=>setLicensePlate(e.target.value.toUpperCase())} placeholder="WU AB 1234" maxLength={12}
+                        aria-invalid={!!fieldErrors.licensePlate}
+                        aria-describedby={fieldErrors.licensePlate ? "license-error" : undefined}
+                        className={`w-full border bg-[#0A0A0B] px-4 text-white text-sm focus:outline-none transition-colors h-12 font-mono ${fieldErrors.licensePlate ? "border-[#E30613] focus:border-[#E30613]" : "border-white/10 focus:border-[#E30613]"}`}/>
+                      {fieldErrors.licensePlate && <p id="license-error" className="mt-1.5 text-xs text-[#E30613]">{fieldErrors.licensePlate}</p>}
                     </div>
 
                     {error && (
@@ -303,7 +342,7 @@ export default function BookingFlow() {
                   </div>
 
                   <div className="mt-6 flex justify-between">
-                    <button onClick={()=>setStep(2)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(2)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button disabled={!name.trim()||!email.trim()||!phone.trim()} onClick={()=>{setError("");setStep(4);}}
@@ -319,7 +358,7 @@ export default function BookingFlow() {
                 <motion.div key="s4" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="text-2xl font-black mb-6">Buchung bestätigen</h2>
                   <div className="bg-[#161618] border border-white/10 p-6 mb-5">
-                    <h3 className="text-[#A1A1AA] text-xs font-mono tracking-widest uppercase mb-5">Übersicht</h3>
+                    <h3 className="text-[#C9C9D1] text-xs font-mono tracking-widest uppercase mb-5">Übersicht</h3>
                     <div className="space-y-3">
                       {[
                         ["Service", selectedService?.name],
@@ -332,7 +371,7 @@ export default function BookingFlow() {
                         ...(licensePlate ? [["Kennzeichen", licensePlate]] : []),
                       ].map(([k,v]) => (
                         <div key={k} className="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
-                          <span className="text-[#A1A1AA] text-sm">{k}</span>
+                          <span className="text-[#C9C9D1] text-sm">{k}</span>
                           <span className="text-white font-mono text-sm">{v}</span>
                         </div>
                       ))}
@@ -348,7 +387,7 @@ export default function BookingFlow() {
                     <span className="text-2xl">💳</span>
                     <div>
                       <div className="text-white font-bold text-sm">Zahlung vor Ort</div>
-                      <div className="text-[#A1A1AA] text-xs mt-1">Bar oder per Karte bei Abholung Ihres Fahrzeugs. Keine Vorkasse erforderlich.</div>
+                      <div className="text-[#C9C9D1] text-xs mt-1">Bar oder per Karte bei Abholung Ihres Fahrzeugs. Keine Vorkasse erforderlich.</div>
                     </div>
                   </div>
 
@@ -358,7 +397,7 @@ export default function BookingFlow() {
                       onClick={()=>setAgbAccepted(v=>!v)}>
                       {agbAccepted && <Check className="w-3 h-3 text-white"/>}
                     </div>
-                    <span className="text-sm text-[#A1A1AA] leading-relaxed">
+                    <span className="text-sm text-[#C9C9D1] leading-relaxed">
                       Ich akzeptiere die <Link to="/agb" target="_blank" className="text-[#E30613] hover:underline">AGB</Link> und habe die <Link to="/datenschutz" target="_blank" className="text-[#E30613] hover:underline">Datenschutzerklärung</Link> zur Kenntnis genommen.
                     </span>
                   </label>
@@ -370,7 +409,7 @@ export default function BookingFlow() {
                   )}
 
                   <div className="flex justify-between">
-                    <button onClick={()=>setStep(3)} className="flex items-center gap-2 text-[#A1A1AA] hover:text-white transition-colors min-h-[44px] px-2">
+                    <button onClick={()=>setStep(3)} className="flex items-center gap-2 text-[#C9C9D1] hover:text-white transition-colors min-h-[44px] px-2">
                       <ArrowLeft className="w-4 h-4"/> Zurück
                     </button>
                     <button onClick={handleSubmit} disabled={submitting||!agbAccepted}
@@ -399,18 +438,18 @@ export default function BookingFlow() {
                   {l:"Dauer", v:selectedService?`${selectedService.duration_minutes} Min.`:"—"},
                 ].map(({l,v})=>(
                   <div key={l}>
-                    <div className="text-[#A1A1AA] text-xs uppercase tracking-wider mb-1">{l}</div>
+                    <div className="text-[#C9C9D1] text-xs uppercase tracking-wider mb-1">{l}</div>
                     <div className="text-white font-mono text-sm">{v}</div>
                   </div>
                 ))}
                 <div className="pt-3 border-t border-white/10">
                   <div className="flex justify-between items-center">
-                    <span className="text-[#A1A1AA] text-sm">Gesamt</span>
+                    <span className="text-[#C9C9D1] text-sm">Gesamt</span>
                     <span className="text-[#E30613] font-mono font-bold text-xl">
                       {selectedService?`€${Number(selectedService.price_eur).toFixed(2)}`:"—"}
                     </span>
                   </div>
-                  <div className="text-[#A1A1AA] text-xs mt-2">💳 Zahlung vor Ort</div>
+                  <div className="text-[#C9C9D1] text-xs mt-2">💳 Zahlung vor Ort</div>
                 </div>
               </div>
             </div>

@@ -47,7 +47,7 @@ export default function Navbar() {
               Anmelden
             </button>
           )}
-          <Link to="/booking" className="bg-[#E10600] text-white text-sm font-bold px-5 py-2 hover:bg-[#c00500] transition-colors">
+          <Link to="/booking" className="bg-[#E30613] text-white text-sm font-bold px-5 py-2 hover:bg-[#c0000f] transition-colors">
             Termin buchen
           </Link>
         </div>
@@ -71,7 +71,7 @@ export default function Navbar() {
           ) : (
             <button onClick={() => base44.auth.redirectToLogin("/dashboard")} className="text-left text-white text-sm font-medium">Anmelden</button>
           )}
-          <Link to="/booking" className="bg-[#E10600] text-white text-sm font-bold px-4 py-2.5 text-center" onClick={() => setMenuOpen(false)}>
+          <Link to="/booking" className="bg-[#E30613] text-white text-sm font-bold px-4 py-2.5 text-center" onClick={() => setMenuOpen(false)}>
             Termin buchen
           </Link>
         </div>

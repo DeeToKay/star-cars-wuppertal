@@ -39,7 +39,7 @@ export default function AdminFilters({ filter, setFilter, dateFilter, setDateFil
             className={`px-3 py-1.5 text-xs font-medium border transition-all font-mono ${
               filter === f.key && !dateFilter
                 ? "border-[#E30613] text-[#E30613] bg-[#E30613]/10"
-                : "border-white/10 text-[#A1A1AA] hover:border-white/30"
+                : "border-white/10 text-[#C9C9D1] hover:border-white/30"
             }`}
           >
             {f.label}
@@ -55,7 +55,7 @@ export default function AdminFilters({ filter, setFilter, dateFilter, setDateFil
       <select
         value={serviceFilter}
         onChange={e => setServiceFilter(e.target.value)}
-        className="border border-white/10 bg-[#0A0A0B] text-[#A1A1AA] text-xs px-3 py-1.5 font-mono focus:outline-none focus:border-[#E30613]"
+        className="border border-white/10 bg-[#0A0A0B] text-[#C9C9D1] text-xs px-3 py-1.5 font-mono focus:outline-none focus:border-[#E30613]"
       >
         <option value="">Alle Services</option>
         {services.map(s => <option key={s} value={s}>{s}</option>)}

@@ -22,7 +22,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[#B5B5B5] hover:text-white text-sm transition-colors group"
             >
-              <Instagram className="w-5 h-5 text-[#E10600] group-hover:scale-110 transition-transform" />
+              <Instagram className="w-5 h-5 text-[#E30613] group-hover:scale-110 transition-transform" />
               @star_cars_wuppertal
             </a>
           </div>
@@ -32,19 +32,19 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase">Kontakt &amp; Öffnungszeiten</h4>
             <div className="space-y-3">
               <div className="flex items-start gap-3 text-[#B5B5B5] text-sm">
-                <MapPin className="w-4 h-4 text-[#E10600] shrink-0 mt-0.5" />
-                <span>Ronsdorferstr. 57, 42283 Wuppertal<br /><span className="text-xs text-[#B5B5B5]/60">(an der StarTankstelle)</span></span>
+                <MapPin className="w-4 h-4 text-[#E30613] shrink-0 mt-0.5" />
+                <span>Ronsdorfer Str. 57, 42119 Wuppertal<br /><span className="text-xs text-[#B5B5B5]/60">(an der StarTankstelle)</span></span>
               </div>
               <div className="flex items-center gap-3 text-[#B5B5B5] text-sm">
-                <Phone className="w-4 h-4 text-[#E10600] shrink-0" />
+                <Phone className="w-4 h-4 text-[#E30613] shrink-0" />
                 <a href="tel:01726871641" className="hover:text-white transition-colors">01726871641</a>
               </div>
               <div className="flex items-center gap-3 text-[#B5B5B5] text-sm">
-                <Mail className="w-4 h-4 text-[#E10600] shrink-0" />
+                <Mail className="w-4 h-4 text-[#E30613] shrink-0" />
                 <a href="mailto:info@starcarswuppertal.com" className="hover:text-white transition-colors">info@starcarswuppertal.com</a>
               </div>
               <div className="flex items-center gap-3 text-[#B5B5B5] text-sm">
-                <Clock className="w-4 h-4 text-[#E10600] shrink-0" />
+                <Clock className="w-4 h-4 text-[#E30613] shrink-0" />
                 <span>Mo – Sa: 10:00 – 20:00 Uhr<br /><span className="text-xs text-[#B5B5B5]/60">Sonntag geschlossen</span></span>
               </div>
             </div>
@@ -56,7 +56,7 @@ export default function Footer() {
             <div className="space-y-2.5">
               <Link to="/impressum" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Impressum</Link>
               <Link to="/datenschutz" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Datenschutzerklärung</Link>
-              <Link to="/agb" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">AGB &amp; Stornierung</Link>
+              <Link to="/agb" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">AGB</Link>
               <Link to="/galerie" className="block text-[#B5B5B5] hover:text-white text-sm transition-colors">Galerie</Link>
             </div>
           </div>
@@ -68,9 +68,9 @@ export default function Footer() {
             © {new Date().getFullYear()} Kilic Savas – Star Cars Wuppertal. Alle Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-px bg-[#E10600]" />
+            <div className="w-6 h-px bg-[#E30613]" />
             <span className="text-[#C0C0C0] text-xs font-mono tracking-widest">PREMIUM AUTO CARE</span>
-            <div className="w-6 h-px bg-[#E10600]" />
+            <div className="w-6 h-px bg-[#E30613]" />
           </div>
         </div>
       </div>
