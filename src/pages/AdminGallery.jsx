@@ -4,17 +4,10 @@ import { base44 } from "@/api/base44Client";
 import { Plus, Trash2, Eye, EyeOff, Upload, Loader2, AlertTriangle, GripVertical, Save } from "lucide-react";
 import Navbar from "../components/Navbar";
 
-// Beispiel-Galerie: Vorher- und Nachher-Bild zeigen dasselbe Foto – das
-// Vorher-Bild ist entsättigt und abgedunkelt (Imgix-Parameter), damit der
-// Slider visuell stimmig wirkt, bis der Inhaber echte Aufnahmen hochlädt.
-const demoBefore = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85&sat=-100&exp=-20&blur=4`;
-const demoAfter  = (id) => `https://images.unsplash.com/photo-${id}?w=1200&q=85`;
-const INITIAL_ITEMS = [
-  { title: "BASIC – Außen- & Innenpflege",   service_type: "BASIC",     before_image_url: demoBefore("1607860108855-64acf2078ed9"), after_image_url: demoAfter("1607860108855-64acf2078ed9"), sort_order: 0, is_published: true },
-  { title: "STANDARD – Glanzfinish",         service_type: "STANDARD",  before_image_url: demoBefore("1619642751034-765dfdf7c58e"), after_image_url: demoAfter("1619642751034-765dfdf7c58e"), sort_order: 1, is_published: true },
-  { title: "DELUXE – Tiefenglanz",           service_type: "DELUXE",    before_image_url: demoBefore("1503376780353-7e6692767b70"), after_image_url: demoAfter("1503376780353-7e6692767b70"), sort_order: 2, is_published: true },
-  { title: "EXCLUSIVE – Showroom-Finish",    service_type: "EXCLUSIVE", before_image_url: demoBefore("1563720360172-67b8f3dce741"), after_image_url: demoAfter("1563720360172-67b8f3dce741"), sort_order: 3, is_published: true },
-];
+// Galerie-Verwaltung: Inhaber lädt Aufnahmen aus der eigenen Werkstatt
+// hoch. Die öffentliche Galerie zeigt das Hauptbild (Nachher); das
+// Detail-/Vorher-Bild ist optional und wird derzeit nur in der
+// Admin-Vorschau angezeigt.
 
 function ImageUpload({ label, value, onChange }) {
   const [uploading, setUploading] = useState(false);
@@ -50,7 +43,6 @@ export default function AdminGallery() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [unauthorized, setUnauthorized] = useState(false);
-  const [migrated, setMigrated] = useState(false);
   const [saving, setSaving] = useState(null);
   const [showNew, setShowNew] = useState(false);
   const [newItem, setNewItem] = useState({ title: "", service_type: "", before_image_url: "", after_image_url: "", sort_order: 0, is_published: true });
@@ -66,17 +58,6 @@ export default function AdminGallery() {
       setLoading(false);
     });
   }, []);
-
-  const migrateInitial = async () => {
-    setSaving("migrate");
-    for (const item of INITIAL_ITEMS) {
-      await base44.entities.GalleryItem.create(item);
-    }
-    const data = await base44.entities.GalleryItem.list("sort_order");
-    setItems(data);
-    setMigrated(true);
-    setSaving(null);
-  };
 
   const togglePublish = async (item) => {
     setSaving(item.id);
@@ -111,7 +92,7 @@ export default function AdminGallery() {
   };
 
   const createItem = async () => {
-    if (!newItem.title || !newItem.before_image_url || !newItem.after_image_url) return;
+    if (!newItem.title || !newItem.after_image_url) return;
     setCreating(true);
     const created = await base44.entities.GalleryItem.create({ ...newItem, sort_order: items.length });
     setItems(prev => [...prev, created]);
@@ -140,16 +121,9 @@ export default function AdminGallery() {
             <h1 className="text-3xl font-black">Galerie verwalten</h1>
           </div>
           <div className="flex gap-3">
-            {items.length === 0 && !migrated && (
-              <button onClick={migrateInitial} disabled={saving === "migrate"}
-                className="flex items-center gap-2 border border-[#C0C0C0]/30 text-[#C0C0C0] text-xs px-4 py-2 hover:border-white transition-colors">
-                {saving === "migrate" ? <Loader2 className="w-3 h-3 animate-spin"/> : null}
-                Beispielbilder importieren
-              </button>
-            )}
             <button onClick={() => setShowNew(v => !v)}
               className="flex items-center gap-2 bg-[#E30613] text-white text-sm font-bold px-5 py-2 hover:bg-[#c0000f] transition-colors">
-              <Plus className="w-4 h-4"/> Neues Bild-Paar
+              <Plus className="w-4 h-4"/> Neues Bild
             </button>
           </div>
         </div>
@@ -158,7 +132,7 @@ export default function AdminGallery() {
         {showNew && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             className="bg-[#161618] border border-[#E30613]/40 p-5 mb-6 space-y-4">
-            <h3 className="text-sm font-bold text-white">Neues Vorher/Nachher-Paar</h3>
+            <h3 className="text-sm font-bold text-white">Neues Galerie-Bild</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs text-[#C9C9D1] mb-1">Titel <span className="text-[#E30613]">*</span></label>
@@ -173,11 +147,11 @@ export default function AdminGallery() {
                   className="w-full border border-white/10 bg-[#0A0A0B] text-white text-xs px-3 h-9 focus:outline-none focus:border-[#E30613]"/>
               </div>
             </div>
-            <ImageUpload label="Vorher-Bild *" value={newItem.before_image_url} onChange={v => setNewItem(p => ({ ...p, before_image_url: v }))}/>
-            <ImageUpload label="Nachher-Bild *" value={newItem.after_image_url} onChange={v => setNewItem(p => ({ ...p, after_image_url: v }))}/>
+            <ImageUpload label="Hauptbild (Nachher) *" value={newItem.after_image_url} onChange={v => setNewItem(p => ({ ...p, after_image_url: v }))}/>
+            <ImageUpload label="Detail-/Vorher-Bild (optional)" value={newItem.before_image_url} onChange={v => setNewItem(p => ({ ...p, before_image_url: v }))}/>
             <div className="flex justify-end gap-3">
               <button onClick={() => setShowNew(false)} className="text-[#C9C9D1] text-sm hover:text-white px-4 py-2">Abbrechen</button>
-              <button onClick={createItem} disabled={creating || !newItem.title || !newItem.before_image_url || !newItem.after_image_url}
+              <button onClick={createItem} disabled={creating || !newItem.title || !newItem.after_image_url}
                 className="flex items-center gap-2 bg-[#E30613] disabled:opacity-40 text-white text-sm font-bold px-6 py-2 hover:bg-[#c0000f] transition-colors">
                 {creating ? <Loader2 className="w-4 h-4 animate-spin"/> : <Save className="w-4 h-4"/>} Speichern
               </button>
@@ -188,7 +162,7 @@ export default function AdminGallery() {
         {items.length === 0 ? (
           <div className="py-20 text-center text-[#C9C9D1] bg-[#161618] border border-white/10">
             <p className="mb-3">Noch keine Galerie-Einträge.</p>
-            <p className="text-xs">Klicken Sie "Beispielbilder importieren" oder fügen Sie manuell Bilder hinzu.</p>
+            <p className="text-xs">Klicken Sie oben rechts auf <strong>"Neues Bild"</strong>, um Ihre erste Aufnahme hochzuladen.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -214,8 +188,8 @@ export default function AdminGallery() {
                       </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <ImageUpload label="Vorher-Bild" value={item.before_image_url} onChange={v => updateField(item.id, "before_image_url", v)}/>
-                      <ImageUpload label="Nachher-Bild" value={item.after_image_url} onChange={v => updateField(item.id, "after_image_url", v)}/>
+                      <ImageUpload label="Hauptbild (Nachher)" value={item.after_image_url} onChange={v => updateField(item.id, "after_image_url", v)}/>
+                      <ImageUpload label="Detail-/Vorher-Bild (optional)" value={item.before_image_url} onChange={v => updateField(item.id, "before_image_url", v)}/>
                     </div>
                   </div>
 
