@@ -77,6 +77,14 @@ Deno.serve(async (req) => {
       return Response.json({ success: false, error: 'Sonntags sind wir geschlossen.' }, { status: 400 });
     }
 
+    // 1h buffer: appointment must be at least 1 hour from now (Europe/Berlin)
+    const nowBerlin = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+    const apptDateTime = new Date(`${appointment_date}T${appointment_time}:00`);
+    const diffMs = apptDateTime - nowBerlin;
+    if (diffMs < 60 * 60 * 1000) {
+      return Response.json({ success: false, error: 'Bitte einen Termin mindestens 1 Stunde in der Zukunft wählen.' }, { status: 400 });
+    }
+
     // Load service from DB
     let service = null;
     try {
