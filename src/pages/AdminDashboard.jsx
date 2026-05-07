@@ -1,10 +1,32 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List, Upload } from "lucide-react";
+import { Calendar, Users, Clock, TrendingUp, Loader2, AlertTriangle, Download, LayoutGrid, List, Upload, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import AdminFilters, { STATUSES } from "../components/admin/AdminFilters";
 import BookingTable from "../components/admin/BookingTable";
+import WeekView from "../components/admin/WeekView";
+
+function getMonday(dateStr) {
+  const d = new Date(dateStr + "T12:00:00");
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().split("T")[0];
+}
+
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + "T12:00:00");
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split("T")[0];
+}
+
+function formatWeekLabel(mondayStr) {
+  const from = new Date(mondayStr + "T12:00:00");
+  const to = new Date(mondayStr + "T12:00:00");
+  to.setDate(to.getDate() + 5);
+  return `${from.toLocaleDateString("de-DE", { day: "2-digit", month: "short" })} – ${to.toLocaleDateString("de-DE", { day: "2-digit", month: "short", year: "numeric" })}`;
+}
 
 function exportCSV(bookings) {
   const headers = ["Datum", "Uhrzeit", "Kundenname", "E-Mail", "Telefon", "Kennzeichen", "Service", "Preis (EUR)", "Status", "Zahlung"];
@@ -31,8 +53,9 @@ export default function AdminDashboard() {
   const [updating, setUpdating] = useState(null);
   const [flashGreen, setFlashGreen] = useState(null);
   const [unauthorized, setUnauthorized] = useState(false);
-  const [viewMode, setViewMode] = useState("list"); // "list" | "bay"
+  const [viewMode, setViewMode] = useState("list"); // "list" | "bay" | "week"
   const [searchQuery, setSearchQuery] = useState("");
+  const [weekStart, setWeekStart] = useState(() => getMonday(new Date().toISOString().split("T")[0]));
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
 
@@ -195,11 +218,14 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="flex border border-white/10 overflow-hidden shrink-0">
-              <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
+              <button onClick={() => setViewMode("list")} title="Liste" className={`px-3 py-1.5 text-xs transition-all ${viewMode === "list" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <List className="w-4 h-4" />
               </button>
-              <button onClick={() => setViewMode("bay")} className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
+              <button onClick={() => setViewMode("bay")} title="Bay-Ansicht" className={`px-3 py-1.5 text-xs transition-all ${viewMode === "bay" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
                 <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button onClick={() => setViewMode("week")} title="Wochenansicht" className={`px-3 py-1.5 text-xs transition-all ${viewMode === "week" ? "bg-[#E30613] text-white" : "text-[#C9C9D1] hover:text-white"}`}>
+                <Calendar className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -221,15 +247,40 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="text-[#C9C9D1] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
-
-          <BookingTable
-            bookings={filtered}
-            updating={updating}
-            flashGreen={flashGreen}
-            onStatusChange={handleStatusChange}
-            viewMode={viewMode}
-          />
+          {viewMode === "week" ? (
+            <div className="bg-[#161618] border border-white/10 p-4">
+              {/* Week navigation */}
+              <div className="flex items-center justify-between mb-4">
+                <button onClick={() => setWeekStart(s => addDays(s, -7))}
+                  className="flex items-center gap-1 text-[#C9C9D1] hover:text-white border border-white/10 hover:border-[#E30613] px-3 py-1.5 text-sm transition-colors">
+                  <ChevronLeft className="w-4 h-4" /> Zurück
+                </button>
+                <div className="flex items-center gap-3">
+                  <span className="text-white font-mono text-sm">{formatWeekLabel(weekStart)}</span>
+                  <button onClick={() => setWeekStart(getMonday(new Date().toISOString().split("T")[0]))}
+                    className="text-[10px] font-mono text-[#E30613] hover:underline border border-[#E30613]/30 hover:border-[#E30613] px-2 py-0.5 transition-colors">
+                    Heute
+                  </button>
+                </div>
+                <button onClick={() => setWeekStart(s => addDays(s, 7))}
+                  className="flex items-center gap-1 text-[#C9C9D1] hover:text-white border border-white/10 hover:border-[#E30613] px-3 py-1.5 text-sm transition-colors">
+                  Nächste <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              <WeekView bookings={bookings} weekStart={weekStart} />
+            </div>
+          ) : (
+            <>
+              <div className="text-[#C9C9D1] text-xs font-mono mb-4">{filtered.length} Buchungen</div>
+              <BookingTable
+                bookings={filtered}
+                updating={updating}
+                flashGreen={flashGreen}
+                onStatusChange={handleStatusChange}
+                viewMode={viewMode}
+              />
+            </>
+          )}
         </motion.div>
       </div>
     </div>
