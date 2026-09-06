@@ -1,0 +1,37 @@
+{
+  "name": "Status\u00e4nderung E-Mail",
+  "description": "Sendet eine E-Mail an den Kunden wenn sich der Buchungsstatus \u00e4ndert (Abholbereit, Storniert, In Bearbeitung).",
+  "trigger": {
+    "condition": "${ (.trigger.changed_fields | index(\"status\") != null) }",
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "update"
+      ],
+      "entity_name": "Booking"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "status_nderung_e_mail",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendBookingEmail",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "sendBookingEmail"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Buchungsbest\u00e4tigung senden",
+  "description": "Sendet eine Best\u00e4tigungs-E-Mail an den Kunden wenn eine neue Buchung erstellt wird.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "Booking"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "buchungsbest_tigung_senden",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendBookingEmail",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "sendBookingEmail"
+  }
+}
